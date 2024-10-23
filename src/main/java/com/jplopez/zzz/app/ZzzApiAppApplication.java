@@ -1,4 +1,4 @@
-package com.jplopez.zzz.zzz_api_app;
+package com.jplopez.zzz.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
