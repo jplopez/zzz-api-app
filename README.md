@@ -11,7 +11,7 @@ Zenless Zone Zero (ZZZ) is a video game from the company Hoyoverse. Is an action
 Players must traverse through different challenges assembling a team of 3 characters - called Agents - plus a helper robot called bangboo. 
 ZZZ uses a gatcha system to collect agents and bangboos, weapons (w-engines) and gear for characters - called discs.
 
-## What it means to 'build' a team?
+## Why do we need this API?
 
 ZZZ leveling system is incredibly flexible and sophisticated, inviting players to try and experiment with different builds all the time. 
 Players are constantly searching and sharing guides with recommended builds for each character. 
