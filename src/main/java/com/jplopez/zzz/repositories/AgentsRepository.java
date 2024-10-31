@@ -10,20 +10,20 @@ import com.jplopez.zzz.entities.Agent;
 @Repository
 public interface AgentsRepository extends JpaRepository<Agent, String> {
 
-  List<Agent> findByName(String name);
+  List<Agent> findByNameIgnoreCase(String name);
 
-  List<Agent> findByRarity(String rarity);
+  List<Agent> findByRarityIgnoreCase(String rarity);
 
-  List<Agent> findByElement(String element);
+  List<Agent> findByElementIgnoreCase(String element);
 
-  List<Agent> findByStyle(String style);
+  List<Agent> findByStyleIgnoreCase(String style);
 
-  List<Agent> findByAttackStyle(String attackStyle);
+  List<Agent> findByAttackStyleIgnoreCase(String attackStyle);
 
-  List<Agent> findByFaction(String faction);
+  List<Agent> findByFactionIgnoreCase(String faction);
 
   List<Agent> findByVersion(Double version);
 
-  List<Agent> findByNameOrRarityOrElementOrStyleOrAttackStyleOrFactionOrVersion(
+  List<Agent> findByNameOrRarityOrElementOrStyleOrAttackStyleOrFactionOrVersionAllIgnoreCase(
       String name, String rarity, String element, String style, String styleAttack, String faction, Double version);
 }

@@ -6,10 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class Agent {
 
@@ -21,6 +23,7 @@ public class Agent {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @EqualsAndHashCode.Exclude
   private String id;
 
   @Column(nullable = false, unique = true)
@@ -29,19 +32,19 @@ public class Agent {
   @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String rarity;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String element;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String style;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String attackStyle;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String faction;
 
   @Column(nullable = false)

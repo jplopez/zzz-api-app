@@ -1,10 +1,14 @@
 package com.jplopez.zzz.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jplopez.zzz.common.exceptions.NotFoundException;
@@ -22,8 +26,8 @@ public class AgentsController {
   }
 
   @GetMapping
-  public Iterable<Agent> findAll() {
-    return repository.findAll();
+  public List<Agent> findAll() {
+    return new ArrayList<>(repository.findAll());
   }
 
   @GetMapping("/{id}")
@@ -32,47 +36,48 @@ public class AgentsController {
         .orElseThrow(NotFoundException::new);
   }
 
-  @GetMapping("/q?name={value}")
+  @GetMapping("/name/{value}")
   public List<Agent> findByName(@PathVariable String value) {
-    return repository.findByName(value);
+    return repository.findByNameIgnoreCase(value);
   }
 
-  @GetMapping("/q?rarity={value}")
+  @GetMapping("/rarity/{value}")
   public List<Agent> findByRarity(@PathVariable String value) {
-    return repository.findByName(value);
+    return repository.findByRarityIgnoreCase(value);
   }
 
-  @GetMapping("/q?element={value}")
+  @GetMapping("/element/{value}")
   public List<Agent> findByElement(@PathVariable String value) {
-    return repository.findByElement(value);
+    return repository.findByElementIgnoreCase(value);
   }
 
-  @GetMapping("/q?style={value}")
+  @GetMapping("/style/{value}")
   public List<Agent> findByStyle(@PathVariable String value) {
-    return repository.findByStyle(value);
+    return repository.findByStyleIgnoreCase(value);
   }
 
-  @GetMapping("/q?attackStyle={value}")
+  @GetMapping("/attackStyle/{value}")
   public List<Agent> findByAttackStyle(@PathVariable String value) {
-    return repository.findByAttackStyle(value);
+    return repository.findByAttackStyleIgnoreCase(value);
   }
 
-  @GetMapping("/q?faction={value}")
+  @GetMapping("/faction/{value}")
   public List<Agent> findByFaction(@PathVariable String value) {
-    return repository.findByFaction(value);
+    return repository.findByFactionIgnoreCase(value);
   }
 
-  @GetMapping("/q?version={value}")
+  @GetMapping("/version/{value}")
   public List<Agent> findByVersion(@PathVariable String value) {
     return repository.findByVersion(Double.valueOf(value));
   }
 
-  @GetMapping("/q?name={name}&rarity={rarity}&element={element}&style={style}&attackStyle={attackStyle}&faction={faction}&version={version}")
-  public List<Agent> queryAgents(@PathVariable String name, @PathVariable String rarity, @PathVariable String element,
-      @PathVariable String style, @PathVariable String attackStyle, @PathVariable String faction,
-      @PathVariable String version) {
-    return repository.findByNameOrRarityOrElementOrStyleOrAttackStyleOrFactionOrVersion(name, rarity, element,
-        attackStyle, style, faction, Double.valueOf(version));
+  @GetMapping("/q")
+  public List<Agent> queryAgents(@RequestParam Map<String,String> queryParams) {
+    if(queryParams.isEmpty()) return findAll();
+    return repository.findByNameOrRarityOrElementOrStyleOrAttackStyleOrFactionOrVersionAllIgnoreCase(
+        queryParams.get("name"), queryParams.get("rarity"), queryParams.get("element"), 
+        queryParams.get("style"), queryParams.get("attackStyle"), 
+        queryParams.get("faction"), NumberUtils.toDouble(queryParams.get("version")));
   }
 
 }

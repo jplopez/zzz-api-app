@@ -17,7 +17,6 @@ public class AgentMock {
     a.setAttackStyle("Brawler");
     a.setFaction("Victoria Housekeeping");
     a.setVersion(1.0);
-    // a.setSkills(createSkills());
     return a;
   }
   
@@ -29,7 +28,6 @@ public class AgentMock {
     a.setAttackStyle("Pierce");
     a.setFaction("N.E.P.S");
     a.setVersion(1.1);
-    // a.setSkills(createSkills());
     return a;
   }
   
@@ -41,7 +39,6 @@ public class AgentMock {
     a.setAttackStyle("Pierce");
     a.setFaction("Sons of Calydon");
     a.setVersion(1.2);
-    // a.setSkills(createSkills());
     return a;
   }
   
