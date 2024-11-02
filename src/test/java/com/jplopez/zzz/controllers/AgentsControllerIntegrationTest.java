@@ -2,6 +2,11 @@ package com.jplopez.zzz.controllers;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
 import com.jplopez.zzz.entities.Agent;
+import com.jplopez.zzz.entities.enums.Attributes;
+import com.jplopez.zzz.entities.enums.Rarity;
+import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Type;
+
 import static com.jplopez.zzz.mocks.AgentMock.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,55 +89,51 @@ class AgentsControllerIntegrationTest {
 
   @Test
   void whenFindAgentByRarity_thenOK() {
-    String rarity = "S";
-    String path = API_ROOT + "/rarity/" + rarity;
+    String path = API_ROOT + "/rarity/" + Rarity.S.toString();
 
     given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
 
     List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
     assertEquals(3, agents.size());
-    agents.forEach(agent -> { assertEquals(rarity, agent.getRarity());});
+    agents.forEach(agent -> { assertEquals(Rarity.S, agent.getRarity());});
   }
 
   @Test
-  void whenFindAgentByElement_thenOK() {
-    String element = "Ice";
-    String path = API_ROOT + "/element/" + element;
+  void whenFindAgentByAttribute_thenOK() {
+    String path = API_ROOT + "/element/" + Attributes.ICE.toString();
 
     given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
 
     List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
     assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(element, agent.getElement());});
+    agents.forEach(agent -> { assertEquals(Attributes.ICE, agent.getAttribute());});
   }
 
   @Test
-  void whenFindAgentByStyle_thenOK() {
-    String style = "Attack";
-    String path = API_ROOT + "/style/" + style;
+  void whenFindAgentBySpecialty_thenOK() {
+    String path = API_ROOT + "/style/" + Specialities.ATTACK.toString();
 
     given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
 
     List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
     assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(style, agent.getStyle());});
+    agents.forEach(agent -> { assertEquals(Specialities.ATTACK, agent.getSpeciality());});
   }
 
   @Test
-  void whenFindAgentByAttackStyle_thenOK() {
-    String attackStyle = "Pierce";
-    String path = API_ROOT + "/attackStyle/" + attackStyle;
+  void whenFindAgentByType_thenOK() {
+    String path = API_ROOT + "/attackStyle/" + Type.PIERCE.toString();
 
     given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
 
     List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
     assertEquals(2, agents.size());
-    agents.forEach(agent -> { assertEquals(attackStyle, agent.getAttackStyle());});
+    agents.forEach(agent -> { assertEquals(Type.PIERCE, agent.getType());});
   }
 
   @Test
   void whenFindAgentByFaction_thenOK() {
-    String faction = "N.E.P.S.";
+    String faction = "Criminal Investigation";
     String path = API_ROOT + "/faction/" + faction;
 
     given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());

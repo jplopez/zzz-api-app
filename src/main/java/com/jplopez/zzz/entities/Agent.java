@@ -1,7 +1,19 @@
 package com.jplopez.zzz.entities;
 
+import com.jplopez.zzz.entities.converter.AttributesConverter;
+import com.jplopez.zzz.entities.converter.RarityConverter;
+import com.jplopez.zzz.entities.converter.SpecialityConverter;
+import com.jplopez.zzz.entities.converter.TypeConverter;
+import com.jplopez.zzz.entities.enums.Attributes;
+import com.jplopez.zzz.entities.enums.Rarity;
+import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Type;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,22 +45,28 @@ public class Agent {
   private String name;
 
   @Column(nullable = false)
-  private String rarity;
+  private String fullName;
 
-  @Column(nullable = false)
-  private String element;
+  @Column(nullable = true)
+  @Convert(converter = RarityConverter.class)
+  private Rarity rarity;
 
-  @Column(nullable = false)
-  private String style;
+  @Column(nullable = true)
+  @Convert(converter = AttributesConverter.class)
+  private Attributes attribute;
 
-  @Column(nullable = false)
-  private String attackStyle;
+  @Column(nullable = true)
+  @Convert(converter = SpecialityConverter.class)
+  private Specialities speciality;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
+  @Convert(converter = TypeConverter.class)
+  private Type type;
+
+  @Column(nullable = true)
   private String faction;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private Double version = 1.0;
-
 
 }

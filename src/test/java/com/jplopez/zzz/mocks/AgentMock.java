@@ -6,15 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.jplopez.zzz.entities.Agent;
+import com.jplopez.zzz.entities.enums.Attributes;
+import com.jplopez.zzz.entities.enums.Rarity;
+import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Type;
 
 public class AgentMock {
 
   public static Agent lycaonMockAgent() {
     Agent a = new Agent("1", "1", "Lycaon");
-    a.setRarity("S");
-    a.setElement("Ice");
-    a.setStyle("Stun");
-    a.setAttackStyle("Brawler");
+    a.setRarity(Rarity.S);
+    a.setAttribute(Attributes.ICE);
+    a.setSpeciality(Specialities.STUN);
+    a.setType(Type.STRIKE);
     a.setFaction("Victoria Housekeeping");
     a.setVersion(1.0);
     return a;
@@ -22,10 +26,10 @@ public class AgentMock {
   
   public static Agent zhuyuanMockAgent() {
     Agent a = new Agent("2", "2", "Zhu Yuan");
-    a.setRarity("S");
-    a.setElement("Ether");
-    a.setStyle("Attack");
-    a.setAttackStyle("Pierce");
+    a.setRarity(Rarity.S);
+    a.setAttribute(Attributes.ETHER);
+    a.setSpeciality(Specialities.ATTACK);
+    a.setType(Type.PIERCE);
     a.setFaction("N.E.P.S");
     a.setVersion(1.1);
     return a;
@@ -33,10 +37,10 @@ public class AgentMock {
   
   public static Agent burniceMockAgent() {
     Agent a = new Agent("3", "3", "Burnice");
-    a.setRarity("S");
-    a.setElement("Fire");
-    a.setStyle("Anomaly");
-    a.setAttackStyle("Pierce");
+    a.setRarity(Rarity.S);
+    a.setAttribute(Attributes.FIRE);
+    a.setSpeciality(Specialities.ANOMALY);
+    a.setType(Type.PIERCE);
     a.setFaction("Sons of Calydon");
     a.setVersion(1.2);
     return a;

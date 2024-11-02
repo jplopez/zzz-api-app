@@ -1,5 +1,6 @@
 package com.jplopez.zzz.controllers;
 
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,10 @@ import jakarta.validation.ConstraintViolationException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-
   @ExceptionHandler({ NotFoundException.class })
   protected ResponseEntity<Object> handleNotFound(
-    Exception ex, WebRequest request) {
-      return handleExceptionInternal(ex, "Not found", 
+      Exception ex, WebRequest request) {
+    return handleExceptionInternal(ex, "Not found",
         new HttpHeaders(), HttpStatus.NOT_FOUND, request);
   }
 
@@ -30,5 +30,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
       Exception ex, WebRequest request) {
     return handleExceptionInternal(ex, ex.getLocalizedMessage(),
         new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
+  @ExceptionHandler(ConversionFailedException.class)
+  public ResponseEntity<String> handleConflict(RuntimeException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 }
