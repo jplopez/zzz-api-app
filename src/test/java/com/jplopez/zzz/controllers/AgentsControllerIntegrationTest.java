@@ -7,158 +7,170 @@ import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 
-import static com.jplopez.zzz.mocks.AgentMock.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static io.restassured.RestAssured.*;
 import static org.apache.commons.lang3.RandomStringUtils.*;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 
 import java.util.List;
-import java.util.ArrayList;
 
+/**
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = ZzzApiAppApplication.class)
+@SpringBootTest(classes = ZzzApiAppApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 class AgentsControllerIntegrationTest {
 
-  private static final String API_ROOT = "http://localhost:8081/agents";
-
-  private String agentAsURI(Agent agent) {
-    Response response = given()
-        .contentType(MediaType.APPLICATION_JSON_VALUE)
-        .body(agent)
-        .post(API_ROOT);
-    return API_ROOT + "/" + response.jsonPath().get("id[0]");
+  @BeforeAll
+  static void setUp() {
+    RestAssured.baseURI="http://localhost:8081";
+    RestAssured.basePath = "/agents";
   }
 
   @Test
   void whenFindAllAgents_thenOK() {
-    Response response = get(API_ROOT);
+    Response response = given().get();
     assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+    String[] names = { "anby", "billy", "nekomata", "nicole", "anton", "ben", "grace", "koleda", "rina", "corin",
+        "ellen", "lycaon", "soldier11", "soukaku", "janedoe", "zhuyuan", "qingyi", "seth", "lucy", "piper", "caesar",
+        "burnice", "yanagi", "lighter" };
 
-    given()
-        .get(API_ROOT)
-        .then()
-        .assertThat()
-        .body("name[0]", anyOf(equalTo("Lycaon"), equalTo("Zhu Yuan"), equalTo("Burnice")))
-        .and()
-        .body("name[1]", anyOf(equalTo("Lycaon"), equalTo("Zhu Yuan"), equalTo("Burnice")))
-        .and()
-        .body("name[2]", anyOf(equalTo("Lycaon"), equalTo("Zhu Yuan"), equalTo("Burnice")));
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>(){});
+    assertThat(agents, everyItem(
+        hasProperty("name", oneOf(names))));
   }
 
   @Test
   void whenFindAgentById_thenOK() {
-    Agent agent = lycaonMockAgent();
-    String url = API_ROOT + "/" + agent.getId();
+    String url = "/12";
+    Response response = given().get(url);
 
-    given()
-        .get(url)
-        .then()
+    response.then()
         .assertThat()
         .statusCode(HttpStatus.OK.value())
-        .body("name", equalTo("Lycaon"))
+        .body("name", equalToIgnoringCase("Lycaon"))
         .and().body("rarity", equalToIgnoringCase("S"))
-        .and().body("element", equalToIgnoringCase("Ice"))
+        .and().body("attribute", equalToIgnoringCase("Ice"))
         .and().body("faction", equalToIgnoringCase("Victoria Housekeeping"))
         .and().body("version", is(1.0f));
   }
 
   @Test
+  void whenFindNonExistentAgent_thenNotFound() {
+    Response response = get("/id/" + randomNumeric(4));
+    assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
+  }
+
+  @Test
   void whenFindAgentByName_thenOK() {
-    String name = "Burnice";
-    String path = API_ROOT + "/name/" + name;
+    String name = "burnice";
+    String path = "/name/" + name;
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(name, agent.getName());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents.getFirst(),
+        hasProperty("name", is(name)));
   }
 
   @Test
   void whenFindAgentByRarity_thenOK() {
-    String path = API_ROOT + "/rarity/" + Rarity.S.toString();
+    String path = "/rarity/" + Rarity.S.toString();
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(3, agents.size());
-    agents.forEach(agent -> { assertEquals(Rarity.S, agent.getRarity());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("rarity", is(Rarity.S))));
   }
 
   @Test
   void whenFindAgentByAttribute_thenOK() {
-    String path = API_ROOT + "/element/" + Attributes.ICE.toString();
+    String path = "/attribute/" + Attributes.ICE.toString();
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(Attributes.ICE, agent.getAttribute());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("attribute", is(Attributes.ICE))));
   }
 
   @Test
   void whenFindAgentBySpecialty_thenOK() {
-    String path = API_ROOT + "/style/" + Specialities.ATTACK.toString();
+    String path = "/speciality/" + Specialities.ATTACK.toString();
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(Specialities.ATTACK, agent.getSpeciality());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("speciality", is(Specialities.ATTACK))));
   }
 
   @Test
   void whenFindAgentByType_thenOK() {
-    String path = API_ROOT + "/attackStyle/" + Type.PIERCE.toString();
+    String path = "/type/" + Type.PIERCE.toString();
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(2, agents.size());
-    agents.forEach(agent -> { assertEquals(Type.PIERCE, agent.getType());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("type", is(Type.PIERCE))));
   }
 
   @Test
   void whenFindAgentByFaction_thenOK() {
-    String faction = "Criminal Investigation";
-    String path = API_ROOT + "/faction/" + faction;
+    String query = "Team";
+    String path = "/faction_like/" + query;
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(faction, agent.getFaction());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {});
+    assertThat(agents, everyItem(
+        hasProperty("faction", containsString(query))));
   }
 
   @Test
   void whenFindAgentByVersion_thenOK() {
     Double version = 1.2;
-    String path = API_ROOT + "/version/" + version;
+    String path = "/version/" + version;
+    Response response = given().get(path);
 
-    given().get(path).then().assertThat().statusCode(HttpStatus.OK.value());
-
-    List<Agent> agents = given().get(path).as(new TypeRef<List<Agent>>() {});
-    assertEquals(1, agents.size());
-    agents.forEach(agent -> { assertEquals(version, agent.getVersion());});
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("version", is(version))));
   }
 
   @Test
-  void whenFindNonExistentAgent_thenNotFound() {
-    Response response = get(API_ROOT + "/id/" + randomNumeric(4));
-    assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
-  }
+  void whenFindAgentBetweenVersion_thenOK() {
+    Double from = 1.0d, to = 1.2d;
+    String path = "/version/" + from + "/" + to;
+    Response response = given().get(path);
 
+    response.then().assertThat().statusCode(HttpStatus.OK.value());
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
+    assertThat(agents, everyItem(
+        hasProperty("version",
+            in(List.of(from,1.1d, to)))));
+  }
 }

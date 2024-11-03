@@ -1,4 +1,4 @@
-create table AGENT(
+create table if not exists AGENT(
   ID int not null AUTO_INCREMENT,
   AGENT_ID int not null AUTO_INCREMENT,
   NAME varchar(100) not null,

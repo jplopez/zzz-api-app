@@ -12,8 +12,6 @@ import com.jplopez.zzz.entities.enums.Type;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +19,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * Agents Entity.
+ * 
+ * Entities are mapped to tables (or equivalent) to transport the data received in REST controllers to the persistence layer (repositories).
+ * Similarly, Entities take the results from querying DBs to the REST controllers who parse them to JSON and response to clients. 
+ * 
+ * @since 1.0
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode

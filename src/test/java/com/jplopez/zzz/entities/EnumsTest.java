@@ -14,8 +14,10 @@ import java.util.Arrays;
 
 /**
  * Test for Enums: Attributes, Rarity, Specialities, Type
+ * 
+ * @since 1.0
  */
-class EnumsTest {
+public class EnumsTest {
 
   Attributes[] attributes = Attributes.values();
   Rarity[] values = Rarity.values();

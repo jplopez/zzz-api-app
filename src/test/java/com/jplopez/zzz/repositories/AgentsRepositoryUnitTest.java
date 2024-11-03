@@ -23,6 +23,9 @@ import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 
+/**
+ * @since 1.0
+ */
 @SpringBootTest(classes = ZzzApiAppApplication.class)
 class AgentsRepositoryUnitTest {
 

@@ -19,6 +19,11 @@ import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 import com.jplopez.zzz.repositories.AgentsRepository;
 
+/**
+ * Rest Controller to retrieve data from Agents
+ * 
+ * @since 1.0
+ */
 @RestController
 @RequestMapping(path = { "/agents", "/a" })
 public class AgentsController {
@@ -45,7 +50,7 @@ public class AgentsController {
     return repository.findByNameIgnoreCase(value);
   }
 
-  @GetMapping("/name?{value}")
+  @GetMapping("/name_like/{value}")
   public List<Agent> findByNameLike(@PathVariable String value) {
     return repository.findByFullNameContaining(value);
   }
@@ -70,7 +75,7 @@ public class AgentsController {
     return repository.findByType(typ);
   }
 
-  @GetMapping("/faction?{value}")
+  @GetMapping("/faction_like/{value}")
   public List<Agent> findByFaction(@PathVariable("value") String value) {
     return repository.findByFactionContaining(value);
   }

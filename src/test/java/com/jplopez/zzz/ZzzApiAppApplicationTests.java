@@ -13,7 +13,9 @@ import com.jplopez.zzz.app.ZzzApiAppApplication;
 import com.jplopez.zzz.controllers.AgentsController;
 import com.jplopez.zzz.repositories.AgentsRepository;
 
-
+/**
+ * @since 1.0
+ */
 @SpringBootTest(classes = ZzzApiAppApplication.class)
 class ZzzApiAppApplicationTests {
 

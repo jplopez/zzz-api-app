@@ -12,6 +12,12 @@ import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 
+/**
+ * Repository to read data of Agents.
+ * Repositories expose the operations available to do against a specific table.
+ * 
+ * @since 1.0
+ */
 @Repository
 public interface AgentsRepository extends JpaRepository<Agent, String> {
 

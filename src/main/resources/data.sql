@@ -52,7 +52,7 @@ INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
 ('caesar', 'Caesar King','S','physical','anomaly','strike','Sons of Calydon', 1.2);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('burnICE', 'BurnICE White','S','fire','anomaly','pierce','Sons of Calydon', 1.2);
+('burnice', 'BurnICE White','S','fire','anomaly','pierce','Sons of Calydon', 1.2);
 
 
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, version) values

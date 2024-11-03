@@ -14,6 +14,11 @@ import com.jplopez.zzz.common.exceptions.NotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
+/**
+ * Centralized class to handle exceptions that occurred in the app
+ * 
+ * @since 1.0
+ */
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 

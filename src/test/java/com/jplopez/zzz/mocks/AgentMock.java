@@ -11,6 +11,9 @@ import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 
+/**
+ * @since 1.0
+ */
 public class AgentMock {
 
   public static Agent lycaonMockAgent() {
