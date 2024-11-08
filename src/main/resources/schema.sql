@@ -11,3 +11,13 @@ create table if not exists AGENT(
   VERSION double precision  null,
   PRIMARY KEY ( ID )
 );
+
+create table if not exists SKILL(
+  ID int not null AUTO_INCREMENT,
+  AGENT_ID int not null,
+  TYPE VARCHAR(15) NOT NULL,
+  NAME varchar(200) not null,
+  DESCRIPTION varchar(1000) NOT null,
+  PRIMARY KEY ( ID ),
+  FOREIGN KEY (AGENT_ID) REFERENCES public.AGENT(ID)
+);

@@ -1,5 +1,7 @@
 package com.jplopez.zzz.entities;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.jplopez.zzz.entities.converter.AttributesConverter;
 import com.jplopez.zzz.entities.converter.RarityConverter;
 import com.jplopez.zzz.entities.converter.SpecialityConverter;
@@ -29,9 +31,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Entity
-public class Agent {
+public class Agent extends RepresentationModel<Agent>{
 
   public Agent(String id, String agentId, String name) {
     this.id = id;

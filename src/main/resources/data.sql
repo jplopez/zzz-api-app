@@ -1,3 +1,7 @@
+------------
+-- AGENTS --
+------------
+
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
 ('anby', 'Anby Demara','A','electric','stun','slash','Cunning Hares', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
@@ -59,3 +63,38 @@ INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, vers
 ('lighter', 'Lighter','S','fire','stun' ,'Sons of Calydon', 1.3);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, version) values
 ('yanagi', 'Tsukishiro Yanagi','S','electric','anomaly','Hollow Special Operations Section 6', 1.3);
+
+
+------------
+-- SKILLS --
+------------
+
+
+
+SET @cur_id=NULL;
+SELECT ID, SET(@cur_id, ID) F FROM AGENT WHERE NAME='anby';
+
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'basic', 'Turbo Volt','Press <IconMap:Icon_Normal> to activate.\nUnleashes up to 4 slashes. The first 3 hits deal Physical DMG the 4th hit deals Electric DMG.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'basic', 'Thunderbolt','After unleashing the 3rd hit of the Basic Attack, hold down or pause for a short while, and then press <IconMap:Icon_Normal> to activate.\nUnleashes a downward strike that deals Electric DMG.\nAnti-Interrupt level is increased while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Special', 'Fork Lightning','Press <IconMap:Icon_Special> to activate.\nUnleashes an upward slash that deals Electric DMG.\nThis attack launches faster when used after the 3rd-hit of the Basic Attack or Basic Attack: Thunderbolt.\nAnti-Interrupt level is increased while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'EX', 'Lightning Bolt','With enough energy, press <IconMap:Icon_SpecialReady> to activate.\nUnleashes a powerful upward slash that deals Electric DMG.\nThis attack launches faster when used after the 3rd hit of her Basic Attack or Basic Attack: Thunderbolt.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Dodge','Slide','Press <IconMap:Icon_Evade> to dodge.\nA rapid dodge.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Dash','Taser Blast','Press <IconMap:Icon_Normal> during a dodge to activate.\nSlashes all nearby enemies, dealing Physical DMG.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Counter','Thunderclap','Press <IconMap:Icon_Normal> during a Perfect Dodge to activate.\nSlashes enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Chain','Electro Engine','When a Chain Attack is triggered, select the character to activate.\nUnleashes a powerful upwards slash at enemies in a small area, dealing massive Electric DMG.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'Ultimate','Overdrive Engine','When Decibel Rating is at Maximum, press <IconMap:Icon_UltimateReady> to activate.\nUnleashes a powerful upward slash at enemies in a small area followed by several falling attacks, dealing massive Electric DMG.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'QuickAssist','Thunderfall','When the on-field character is launched, press <IconMap:Icon_Switch> to activate.\nSlashes enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'DefensiveAssist','Flash','When the character on field is about to be attacked, press <IconMap:Icon_Switch> to activate.\nParries the enemy''s attack, inflicting massive Daze.\nCharacter is invulnerable while using this skill.');
+INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
+(@cur_id, 'FollowUp','Lightning Whirl','Press <IconMap:Icon_Normal> after a Defensive Assist to activate.\nPerform a spinning slash against enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');

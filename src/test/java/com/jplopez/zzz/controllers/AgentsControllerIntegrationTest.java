@@ -1,6 +1,7 @@
 package com.jplopez.zzz.controllers;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
+import com.jplopez.zzz.common.EnumUtils;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 
 import io.restassured.RestAssured;
@@ -31,12 +31,12 @@ import java.util.List;
  * @since 1.0
  */
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = ZzzApiAppApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = ZzzApiAppApplication.class)
 class AgentsControllerIntegrationTest {
 
   @BeforeAll
   static void setUp() {
-    RestAssured.baseURI="http://localhost:8081";
+    RestAssured.baseURI = "http://localhost:8081";
     RestAssured.basePath = "/agents";
   }
 
@@ -48,9 +48,26 @@ class AgentsControllerIntegrationTest {
         "ellen", "lycaon", "soldier11", "soukaku", "janedoe", "zhuyuan", "qingyi", "seth", "lucy", "piper", "caesar",
         "burnice", "yanagi", "lighter" };
 
-    List<Agent> agents = response.as(new TypeRef<List<Agent>>(){});
-    assertThat(agents, everyItem(
-        hasProperty("name", oneOf(names))));
+    assertEquals(Integer.valueOf(24),
+        response.then().extract().body().path("_embedded.agentList.size()"));
+
+    assertThat(response.then().extract().jsonPath().getList("_embedded.agentList.name"),
+        everyItem(is(oneOf(names))));
+
+    assertThat(response.then().extract().jsonPath().getList("_embedded.agentList.rarity"),
+        everyItem(is(oneOf(EnumUtils.getStringValues(Rarity.class)))));
+
+    assertThat(response.then().extract().jsonPath().getList("_embedded.agentList.attribute"),
+        everyItem(is(oneOf(EnumUtils.getStringValues(Attributes.class)))));
+
+    List<String> agentIds = response.then().extract().jsonPath().getList("_embedded.agentList.agentId");
+    List<String> selfLinks = response.then().extract().jsonPath().getList("_embedded.agentList._links.self.href");
+
+    selfLinks.forEach(link -> {
+      assertThat(agentIds.stream().anyMatch(s -> link.endsWith(s)), is(true));
+    });
+
+    //TODO assert skill links are present and are formed correctly
   }
 
   @Test
@@ -142,7 +159,8 @@ class AgentsControllerIntegrationTest {
     Response response = given().get(path);
 
     response.then().assertThat().statusCode(HttpStatus.OK.value());
-    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {});
+    List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
+    });
     assertThat(agents, everyItem(
         hasProperty("faction", containsString(query))));
   }
@@ -171,6 +189,6 @@ class AgentsControllerIntegrationTest {
     });
     assertThat(agents, everyItem(
         hasProperty("version",
-            in(List.of(from,1.1d, to)))));
+            in(List.of(from, 1.1d, to)))));
   }
 }
