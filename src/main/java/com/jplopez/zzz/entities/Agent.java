@@ -30,15 +30,13 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  */
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Agent extends RepresentationModel<Agent>{
+public class Agent extends ZZZEntityModel<Agent>{
 
   public Agent(String id, String agentId, String name) {
-    this.id = id;
+    super(id, name, null);
     this.agentId = agentId;
-    this.name = name;
   }
 
   @Id
@@ -48,9 +46,6 @@ public class Agent extends RepresentationModel<Agent>{
 
   @Column(nullable = false, unique = true)
   private String agentId;
-
-  @Column(nullable = false, unique = true)
-  private String name;
 
   @Column(nullable = false)
   private String fullName;
@@ -74,7 +69,5 @@ public class Agent extends RepresentationModel<Agent>{
   @Column(nullable = true)
   private String faction;
 
-  @Column(nullable = true)
-  private Double version = 1.0;
 
 }

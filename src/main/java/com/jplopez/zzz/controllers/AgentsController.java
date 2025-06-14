@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import com.jplopez.zzz.common.exceptions.NotFoundException;
+import com.jplopez.zzz.common.exceptions.ZZZEntityNotFoundException;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.Skill;
 import com.jplopez.zzz.entities.enums.Attributes;
@@ -19,6 +19,7 @@ import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 import com.jplopez.zzz.repositories.AgentsRepository;
 import com.jplopez.zzz.repositories.SkillsRepository;
+import com.jplopez.zzz.repositories.ZZZRepository;
 
 /**
  * Rest Controller to retrieve data from Agents
@@ -27,17 +28,17 @@ import com.jplopez.zzz.repositories.SkillsRepository;
  */
 @RestController
 @RequestMapping(path = { "/agents", "/a" })
-public class AgentsController {
-
-  private final AgentsRepository repository;
+public class AgentsController extends ZZZController<Agent,AgentsRepository> {
 
   private final SkillsRepository skillsRepo;
 
-  AgentsController(AgentsRepository repository, SkillsRepository skillsRepo) {
-      this.repository = repository;
+  AgentsController(ZZZRepository repository, SkillsRepository skillsRepo) {
+      super("agents",repository);
       this.skillsRepo = skillsRepo;
   }
 
+
+  @Override
   @GetMapping(produces = { "application/hal+json" })
   public CollectionModel<Agent> findAll() {
     List<Agent> agents = repository.findAll();
@@ -58,12 +59,14 @@ public class AgentsController {
     return CollectionModel.of(agents, link);
   }
 
+  @Override
   @GetMapping("/{id}")
   public Agent findOne(@PathVariable String id) {
     return repository.findById(id)
-        .orElseThrow(NotFoundException::new);
+        .orElseThrow(ZZZEntityNotFoundException::new);
   }
 
+  @Override
   @GetMapping("/name/{value}")
   public List<Agent> findByName(@PathVariable String value) {
     return repository.findByNameIgnoreCase(value);
@@ -99,11 +102,13 @@ public class AgentsController {
     return repository.findByFactionContaining(value);
   }
 
+  @Override
   @GetMapping("/version/{value}")
   public List<Agent> findByVersion(@PathVariable String value) {
     return repository.findByVersion(Double.valueOf(value));
   }
 
+  @Override
   @GetMapping("/version/{from}/{to}")
   public List<Agent> findByVersion(@PathVariable String from, @PathVariable String to) {
     return repository.findByVersionBetween(Double.valueOf(from), Double.valueOf(to));
@@ -111,7 +116,7 @@ public class AgentsController {
 
   @GetMapping("/{agentId}/skill/{skillId}")
   public Skill findSkillById(@PathVariable final String agentId, @PathVariable final String skillId) {
-    return skillsRepo.findByIdAndAgentId(agentId, skillId).orElseThrow(NotFoundException::new);
+    return skillsRepo.findByIdAndAgentId(agentId, skillId).orElseThrow(ZZZEntityNotFoundException::new);
   }
 
   @GetMapping(value="/{agentId}/skills", produces = {"application/hal+json" })

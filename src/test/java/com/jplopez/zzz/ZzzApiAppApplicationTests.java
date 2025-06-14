@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
-import com.jplopez.zzz.controllers.AgentsController;
-import com.jplopez.zzz.repositories.AgentsRepository;
+import com.jplopez.zzz.controllers.ZZZController;
+import com.jplopez.zzz.repositories.ZZZRepository;
 
 /**
  * @since 1.0
@@ -23,10 +23,10 @@ class ZzzApiAppApplicationTests {
 	Environment env;
 
 	@Autowired
-	AgentsController controller;
+	ZZZController controller;
 
 	@Autowired
-	AgentsRepository repo;
+	ZZZRepository repo;
 
 	@Value("${server.port}")
 	int serverPort;

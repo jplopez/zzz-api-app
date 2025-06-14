@@ -8,8 +8,9 @@ package com.jplopez.zzz.common.exceptions;
  * 
  * @since 1.0
  */
-public class NotFoundException extends RuntimeException {
+public class ZZZEntityNotFoundException extends RuntimeException {
 
-  public NotFoundException() { super(); }
-  public NotFoundException(String message, Throwable cause) { super(message,cause); }
+  public ZZZEntityNotFoundException() { super(); }
+  public ZZZEntityNotFoundException(String message) { super(message); }
+  public ZZZEntityNotFoundException(String message, Throwable cause) { super(message,cause); }
 }

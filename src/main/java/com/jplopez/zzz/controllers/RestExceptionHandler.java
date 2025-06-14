@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.jplopez.zzz.common.exceptions.NotFoundException;
+import com.jplopez.zzz.common.exceptions.ZZZEntityNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -22,7 +22,7 @@ import jakarta.validation.ConstraintViolationException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler({ NotFoundException.class })
+  @ExceptionHandler({ ZZZEntityNotFoundException.class })
   protected ResponseEntity<Object> handleNotFound(
       Exception ex, WebRequest request) {
     return handleExceptionInternal(ex, "Not found",
