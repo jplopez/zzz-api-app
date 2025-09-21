@@ -100,7 +100,7 @@ class AgentsControllerIntegrationTest {
     response.then().assertThat().statusCode(HttpStatus.OK.value());
     List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
     });
-    assertThat(agents.getFirst(),
+    assertThat(agents.get(0),
         hasProperty("name", is(name)));
   }
 
