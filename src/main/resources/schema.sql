@@ -12,6 +12,23 @@ create table if not exists AGENT(
   PRIMARY KEY ( ID )
 );
 
+create table if not exists WENGINE(
+  ID int not null AUTO_INCREMENT,
+  WENGINE_ID varchar(100) not null,
+  NAME varchar(100) not null,
+  DESCRIPTION varchar(1000) null,
+  RARITY varchar(1) null,
+  BASE_ATTACK int null,
+  SPECIALTY varchar(10) null,
+  PRIMARY KEY ( ID )
+);
+
+create table if not exists WENGINE_SKILL_DESCRIPTIONS(
+  WENGINE_ID int not null,
+  SKILL_DESCRIPTIONS varchar(1000) not null,
+  FOREIGN KEY (WENGINE_ID) REFERENCES public.WENGINE(ID)
+);
+
 create table if not exists SKILL(
   ID int not null AUTO_INCREMENT,
   AGENT_ID int not null,
