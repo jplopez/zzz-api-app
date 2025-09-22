@@ -9,7 +9,6 @@ import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 
 import static io.restassured.RestAssured.*;
-import static org.apache.commons.lang3.RandomStringUtils.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +25,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * @since 1.0
@@ -64,7 +64,7 @@ class AgentsControllerIntegrationTest {
     List<String> selfLinks = response.then().extract().jsonPath().getList("_embedded.agentList._links.self.href");
 
     selfLinks.forEach(link -> {
-      assertThat(agentIds.stream().anyMatch(s -> link.endsWith(s)), is(true));
+      assertThat(agentIds.stream().anyMatch(link::endsWith), is(true));
     });
 
     //TODO assert skill links are present and are formed correctly
@@ -87,7 +87,7 @@ class AgentsControllerIntegrationTest {
 
   @Test
   void whenFindNonExistentAgent_thenNotFound() {
-    Response response = get("/id/" + randomNumeric(4));
+    Response response = get("/id/" + (new Random().nextInt(1,4) + 1000));
     assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
   }
 

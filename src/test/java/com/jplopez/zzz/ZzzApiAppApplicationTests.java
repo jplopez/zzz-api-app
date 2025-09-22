@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
 import com.jplopez.zzz.controllers.ZZZController;
-import com.jplopez.zzz.repositories.ZZZRepository;
 
 /**
  * @since 1.0
@@ -25,8 +24,6 @@ class ZzzApiAppApplicationTests {
 	@Autowired
 	ZZZController controller;
 
-	@Autowired
-	ZZZRepository repo;
 
 	@Value("${server.port}")
 	int serverPort;
@@ -35,7 +32,6 @@ class ZzzApiAppApplicationTests {
 	void contextLoads() {
 		assertEquals(8081, serverPort);
 		assertNotNull(controller);
-		assertNotNull(repo);
 		//tests the Spring Boot context load
 	}
 

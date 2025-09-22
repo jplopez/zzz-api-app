@@ -19,7 +19,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * Agents Entity.
@@ -32,12 +31,8 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Agent extends ZZZEntityModel<Agent>{
+public class Agent extends RepresentationModel<Agent> {
 
-  public Agent(String id, String agentId, String name) {
-    super(id, name, null);
-    this.agentId = agentId;
-  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,6 +41,12 @@ public class Agent extends ZZZEntityModel<Agent>{
 
   @Column(nullable = false, unique = true)
   private String agentId;
+
+  @Column(nullable = false, unique = true)
+  private String name;  
+
+  @Column(nullable = true)
+  private Float version = 1.0f;
 
   @Column(nullable = false)
   private String fullName;
@@ -69,5 +70,76 @@ public class Agent extends ZZZEntityModel<Agent>{
   @Column(nullable = true)
   private String faction;
 
+
+  public Agent() {
+    super();
+  }
+
+  public Agent(String id, String agentId, String name) {
+    this(id,agentId,name,1.0f);
+  }
+  public Agent(String id, String agentId, String name, Float version) {
+    super();
+    this.id = id;
+    this.agentId = agentId;
+    this.name = name;
+    this.version = version;
+  }
+  
+
+  /**
+   * Checks if the Model was released in a specific version
+   * @param version
+   * @return
+   */
+  public boolean isVersion(float version) {
+    return this.version.equals(version);
+  }
+
+  /**
+   * Whether this entity was released after a specific version
+   * @param version
+   * @return
+   */
+  public boolean afterVersion(float version) {
+    return this.version > version;
+  }
+
+  /**
+   * Whether this entity was released after or at a specific version
+   * @param version
+   * @return
+   */
+  public boolean afterOrAtVersion(float version) {
+    return this.version >= version;
+  }
+
+  /**
+   * Whether this entity was released before a specific version
+   * @param version
+   * @return
+   */
+  public boolean beforeVersion(float version) {
+    return this.version < version;
+  }
+
+
+  /**
+   * Whether this entity was released before or at a specific version
+   * @param version
+   * @return
+   */
+  public boolean beforeOrAtVersion(float version) {
+    return this.version <= version;
+  }
+
+  /**
+   * Convenient method to check if an entity was present in a specific version.
+   * @param version
+   * @return
+   */
+  public boolean wasInVersion(float version) {
+    return beforeOrAtVersion(version);
+  }
 
 }

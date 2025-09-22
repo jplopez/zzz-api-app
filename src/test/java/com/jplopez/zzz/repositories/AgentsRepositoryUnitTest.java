@@ -6,11 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
-import static org.apache.commons.lang3.RandomStringUtils.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ class AgentsRepositoryUnitTest {
   @Test
   void findAllTest() {
     Iterable<Agent> agents = repo.findAll();
-    agents.forEach(agent -> weakAssertAgent(agent));
+    agents.forEach(this::weakAssertAgent);
   }
 
   @Test
@@ -53,7 +54,7 @@ class AgentsRepositoryUnitTest {
 
   @Test
   void findById_thenNotFound() {
-    Optional<Agent> optional = repo.findById(randomNumeric(4));
+    Optional<Agent> optional = repo.findById(new Random(4).nextInt(1,4) + 1000 + "");
     assertFalse(optional.isPresent());
   }
 
@@ -164,27 +165,26 @@ class AgentsRepositoryUnitTest {
 
   @Test
   void findByOneVersion_thenReturnMany() {
-    Iterable<Agent> agents = repo.findByVersion(1.0d);
+    Iterable<Agent> agents = repo.findByVersion(1.0f);
     assertThat(agents, everyItem(
-        hasProperty("version", is(1.0d))));
+        hasProperty("version", is(1.0f))));
   }
 
   @Test
   void findByVersionBetween_thenReturnMany() {
-    Iterable<Agent> agents = repo.findByVersionBetween(1.0d, 1.2d);
-    Double[] expectedVersions = {1.0d,1.1d,1.2d};
+    Iterable<Agent> agents = repo.findByVersionBetween(1.0f, 1.2f);
+    Float[] expectedVersions = {1.0f,1.1f,1.2f};
     assertThat(agents, everyItem(
         hasProperty("version", in(expectedVersions))));
   }
 
   @Test
   void findByVersionIn_thenReturnMany() {
-    Double[] expectedVersions = {1.0d,1.2d};
+    Float[] expectedVersions = {1.0f,1.2f,1.5f};
     Iterable<Agent> agents = repo.findByVersionIn(List.of(expectedVersions));
     assertThat(agents, everyItem(
         hasProperty("version", in(expectedVersions))));
   }
-
 
   @Test
   void searchByRarityAndType_thenReturnMany() {

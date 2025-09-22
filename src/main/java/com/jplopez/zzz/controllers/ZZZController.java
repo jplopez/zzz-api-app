@@ -5,24 +5,24 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jplopez.zzz.common.exceptions.ZZZEntityNotFoundException;
-import com.jplopez.zzz.entities.ZZZEntityModel;
-import com.jplopez.zzz.repositories.ZZZRepository;
 
 @RestController
-public abstract class ZZZController<T extends ZZZEntityModel<T>, R extends ZZZRepository<T>> {
+public abstract class ZZZController<T extends RepresentationModel<T>, R extends JpaRepository<T, String>> {
 
   protected final String path;
 
   protected final R repository;
 
-  ZZZController(String path, R repository) {
+  protected ZZZController(String path, R repository) {
     this.path = path;
     this.repository = repository;
   }
@@ -39,12 +39,8 @@ public abstract class ZZZController<T extends ZZZEntityModel<T>, R extends ZZZRe
   public CollectionModel<T> findAll() {
     List<T> entities = repository.findAll();
 
-    for (T entity : entities) {
-      entity.add(linkTo(methodOn(WEnginesController.class)
-          .findOne(entity.getName())).withSelfRel());
-    }
     return CollectionModel.of(entities,
-        linkTo(methodOn(WEnginesController.class).findAll()).withSelfRel());
+        linkTo(methodOn(this.getClass()).findAll()).withSelfRel());
   }
 
   @GetMapping("/{id}")
@@ -53,10 +49,10 @@ public abstract class ZZZController<T extends ZZZEntityModel<T>, R extends ZZZRe
         .orElseThrow(ZZZEntityNotFoundException::new);
   }
 
-  @GetMapping("/name/{value}")
-  public List<T> findByName(@PathVariable String value) {
-    return repository.findByNameIgnoreCase(value);
-  }
+  // @GetMapping("/name/{value}")
+  // public List<T> findByName(@PathVariable String value) {
+  //   return repository.findByName(value);
+  // }
 
   @GetMapping("/version/{value}")
   public abstract List<T> findByVersion(@PathVariable String value);
@@ -68,9 +64,8 @@ public abstract class ZZZController<T extends ZZZEntityModel<T>, R extends ZZZRe
     return linkTo(this.getClass()).slash(entityId).withSelfRel();
   }
 
-  protected Link RelLink(String id) {
+  protected Link relLink(String id) {
     return Link.of("/" + path + "/{id}", id);
   }
 
-  protected abstract String getID();
 }

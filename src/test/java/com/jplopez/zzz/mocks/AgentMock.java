@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
+
 
 /**
  * @since 1.0
@@ -23,7 +25,7 @@ public class AgentMock {
     a.setSpeciality(Specialities.STUN);
     a.setType(Type.STRIKE);
     a.setFaction("Victoria Housekeeping");
-    a.setVersion(1.0);
+    a.setVersion(1.0f);
     return a;
   }
   
@@ -34,7 +36,7 @@ public class AgentMock {
     a.setSpeciality(Specialities.ATTACK);
     a.setType(Type.PIERCE);
     a.setFaction("N.E.P.S");
-    a.setVersion(1.1);
+    a.setVersion(1.1f);
     return a;
   }
   
@@ -45,7 +47,7 @@ public class AgentMock {
     a.setSpeciality(Specialities.ANOMALY);
     a.setType(Type.PIERCE);
     a.setFaction("Sons of Calydon");
-    a.setVersion(1.2);
+    a.setVersion(1.2f);
     return a;
   }
   
@@ -59,7 +61,7 @@ public class AgentMock {
   
   static Agent random() {
     Agent[] agents = { lycaonMockAgent(), zhuyuanMockAgent(), burniceMockAgent() };
-    return agents[(int) Math.floor(Math.random() * agents.length)];
+    return agents[new Random().nextInt(agents.length)];
   }
 
   static Object createOneSkill(String name) {

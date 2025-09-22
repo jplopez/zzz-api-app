@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.5.6</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jplopez.zzz</groupId>
@@ -21,7 +21,7 @@
 	</licenses>
 	<developers>
 		<developer>
-			<name>Juan Pablo Lopez</name>
+			<name>"Juan Pablo Lopez"</name>
 			<email>jp.lopez.navarrp@gmail.com</email>
 			<url>https://github.com/jplopez</url>
 		</developer>
@@ -40,6 +40,12 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
@@ -50,7 +56,6 @@
 		<dependency>
 			<groupId>org.springframework.hateoas</groupId>
 			<artifactId>spring-hateoas</artifactId>
-			<version>2.3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.plugin</groupId>
@@ -83,14 +88,15 @@
 		</dependency>
 
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.azure.spring</groupId>
 			<artifactId>spring-cloud-azure-starter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.azure.spring</groupId>
 			<artifactId>spring-cloud-azure-starter-data-cosmos</artifactId>
-		</dependency>
+		</dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-core</artifactId>
@@ -154,6 +160,11 @@
 			<version>1.11.0-M1</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -164,13 +175,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-				<groupId>com.azure.spring</groupId>
-				<artifactId>spring-cloud-azure-dependencies</artifactId>
-				<version>${spring-cloud-azure.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -182,6 +187,7 @@
 				<version>1.61.5</version>
 				<executions>
 					<execution>
+						<?m2e ignore?>
 						<id>dgs-codegen</id>
 						<goals>
 							<goal>generate</goal>
@@ -208,7 +214,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>${project.build.directory}/generated-sources</source>
+								<source>${project.build.directory}/generated-sources/annotations</source>
 							</sources>
 						</configuration>
 					</execution>

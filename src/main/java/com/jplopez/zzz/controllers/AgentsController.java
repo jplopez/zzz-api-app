@@ -19,7 +19,7 @@ import com.jplopez.zzz.entities.enums.Specialities;
 import com.jplopez.zzz.entities.enums.Type;
 import com.jplopez.zzz.repositories.AgentsRepository;
 import com.jplopez.zzz.repositories.SkillsRepository;
-import com.jplopez.zzz.repositories.ZZZRepository;
+
 
 /**
  * Rest Controller to retrieve data from Agents
@@ -32,8 +32,8 @@ public class AgentsController extends ZZZController<Agent,AgentsRepository> {
 
   private final SkillsRepository skillsRepo;
 
-  AgentsController(ZZZRepository repository, SkillsRepository skillsRepo) {
-      super("agents",repository);
+  AgentsController(AgentsRepository repository, SkillsRepository skillsRepo) {
+      super("agents", repository);
       this.skillsRepo = skillsRepo;
   }
 
@@ -66,7 +66,6 @@ public class AgentsController extends ZZZController<Agent,AgentsRepository> {
         .orElseThrow(ZZZEntityNotFoundException::new);
   }
 
-  @Override
   @GetMapping("/name/{value}")
   public List<Agent> findByName(@PathVariable String value) {
     return repository.findByNameIgnoreCase(value);
@@ -102,16 +101,16 @@ public class AgentsController extends ZZZController<Agent,AgentsRepository> {
     return repository.findByFactionContaining(value);
   }
 
-  @Override
+
   @GetMapping("/version/{value}")
   public List<Agent> findByVersion(@PathVariable String value) {
-    return repository.findByVersion(Double.valueOf(value));
+    return repository.findByVersion(Float.valueOf(value));
   }
 
-  @Override
+
   @GetMapping("/version/{from}/{to}")
   public List<Agent> findByVersion(@PathVariable String from, @PathVariable String to) {
-    return repository.findByVersionBetween(Double.valueOf(from), Double.valueOf(to));
+    return repository.findByVersionBetween(Float.valueOf(from), Float.valueOf(to));
   }
 
   @GetMapping("/{agentId}/skill/{skillId}")
@@ -132,4 +131,5 @@ public class AgentsController extends ZZZController<Agent,AgentsRepository> {
       .getSkillsforAgent(agentId)).withSelfRel();
     return CollectionModel.of(skills, link);
   }
+
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import com.jplopez.zzz.common.exceptions.NotFoundException;
+import com.jplopez.zzz.common.exceptions.ZZZEntityNotFoundException;
 import com.jplopez.zzz.entities.Wengine;
 import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.entities.enums.Specialities;
@@ -44,7 +44,7 @@ public class WengineController {
   public Wengine findOne(@PathVariable String id) {
     return repository.findById(id)
         .map(wengine -> wengine.add(linkTo(methodOn(WengineController.class).findOne(wengine.getId())).withSelfRel()))
-        .orElseThrow(() -> new NotFoundException());
+        .orElseThrow(ZZZEntityNotFoundException::new);
   }
 
   @GetMapping("/name/{value}")
