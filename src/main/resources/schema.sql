@@ -38,3 +38,13 @@ create table if not exists SKILL(
   PRIMARY KEY ( ID ),
   FOREIGN KEY (AGENT_ID) REFERENCES public.AGENT(ID)
 );
+
+create table if not exists BANGBOO(
+  ID int not null AUTO_INCREMENT,
+  BANGBOO_ID varchar(100) not null,
+  NAME varchar(100) not null,
+  RARITY varchar(1) null,
+  FACTION varchar(200) null,
+  VERSION double precision null,
+  PRIMARY KEY ( ID )
+);
