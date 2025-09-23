@@ -69,35 +69,71 @@ INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, vers
 -- SKILLS --
 ------------
 
+-- Sample skills with tokenized descriptions
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('basic', 'Turbo Volt', 'Unleashes up to {1} slashes dealing {2}% damage');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('basic', 'Thunderbolt', 'Deals {1}% Electric DMG with {2} second stun');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('special', 'Fork Lightning', 'Upward slash dealing {1}% Electric DMG with {2}% crit chance');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('EX', 'Lightning Bolt', 'Powerful slash dealing {1}% Electric DMG');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('dodge', 'Slide', 'Rapid dodge with {1}% movement speed for {2} seconds');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('dash', 'Taser Blast', 'Slashes dealing {1}% Physical DMG');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('counter', 'Thunderclap', 'Counter attack dealing {1}% Electric DMG');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('chain', 'Electro Engine', 'Chain attack dealing {1}% massive Electric DMG');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('ultimate', 'Overdrive Engine', 'Ultimate dealing {1}% Electric DMG over {2} hits');
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES 
+('assist', 'Thunderfall', 'Assist attack dealing {1}% Electric DMG');
 
+--------------------
+-- AGENT_SKILL --
+--------------------
 
-SET @cur_id=NULL;
-SELECT ID, SET(@cur_id, ID) F FROM AGENT WHERE NAME='anby';
+-- Link Anby's skills to her agent ID
+SET @anby_agent_id = (SELECT ID FROM AGENT WHERE NAME = 'anby');
+SET @skill1_id = (SELECT ID FROM SKILL WHERE NAME = 'Turbo Volt');
+SET @skill2_id = (SELECT ID FROM SKILL WHERE NAME = 'Thunderbolt');
+SET @skill3_id = (SELECT ID FROM SKILL WHERE NAME = 'Fork Lightning');
+SET @skill4_id = (SELECT ID FROM SKILL WHERE NAME = 'Lightning Bolt');
+SET @skill5_id = (SELECT ID FROM SKILL WHERE NAME = 'Slide');
 
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'basic', 'Turbo Volt','Press <IconMap:Icon_Normal> to activate.\nUnleashes up to 4 slashes. The first 3 hits deal Physical DMG the 4th hit deals Electric DMG.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'basic', 'Thunderbolt','After unleashing the 3rd hit of the Basic Attack, hold down or pause for a short while, and then press <IconMap:Icon_Normal> to activate.\nUnleashes a downward strike that deals Electric DMG.\nAnti-Interrupt level is increased while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Special', 'Fork Lightning','Press <IconMap:Icon_Special> to activate.\nUnleashes an upward slash that deals Electric DMG.\nThis attack launches faster when used after the 3rd-hit of the Basic Attack or Basic Attack: Thunderbolt.\nAnti-Interrupt level is increased while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'EX', 'Lightning Bolt','With enough energy, press <IconMap:Icon_SpecialReady> to activate.\nUnleashes a powerful upward slash that deals Electric DMG.\nThis attack launches faster when used after the 3rd hit of her Basic Attack or Basic Attack: Thunderbolt.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Dodge','Slide','Press <IconMap:Icon_Evade> to dodge.\nA rapid dodge.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Dash','Taser Blast','Press <IconMap:Icon_Normal> during a dodge to activate.\nSlashes all nearby enemies, dealing Physical DMG.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Counter','Thunderclap','Press <IconMap:Icon_Normal> during a Perfect Dodge to activate.\nSlashes enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Chain','Electro Engine','When a Chain Attack is triggered, select the character to activate.\nUnleashes a powerful upwards slash at enemies in a small area, dealing massive Electric DMG.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'Ultimate','Overdrive Engine','When Decibel Rating is at Maximum, press <IconMap:Icon_UltimateReady> to activate.\nUnleashes a powerful upward slash at enemies in a small area followed by several falling attacks, dealing massive Electric DMG.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'QuickAssist','Thunderfall','When the on-field character is launched, press <IconMap:Icon_Switch> to activate.\nSlashes enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'DefensiveAssist','Flash','When the character on field is about to be attacked, press <IconMap:Icon_Switch> to activate.\nParries the enemy''s attack, inflicting massive Daze.\nCharacter is invulnerable while using this skill.');
-INSERT INTO SKILL (AGENT_ID, TYPE, NAME, DESCRIPTION) VALUES 
-(@cur_id, 'FollowUp','Lightning Whirl','Press <IconMap:Icon_Normal> after a Defensive Assist to activate.\nPerform a spinning slash against enemies in front, dealing Electric DMG.\nCharacter is invulnerable while using this skill.');
+INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill1_id, @anby_agent_id);
+INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill2_id, @anby_agent_id);
+INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill3_id, @anby_agent_id);
+INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill4_id, @anby_agent_id);
+INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill5_id, @anby_agent_id);
+
+-------------------
+-- SKILL_STAT --
+-------------------
+
+-- Skill stats for Turbo Volt (levels 1-3)
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 1, 1, 4);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 1, 2, 150);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 2, 1, 4);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 2, 2, 175);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 3, 1, 4);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 3, 2, 200);
+
+-- Skill stats for Thunderbolt (levels 1-3)
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 1, 1, 120);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 1, 2, 2);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 2, 1, 140);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 2, 2, 2.5);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 3, 1, 160);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 3, 2, 3);
+
+-- Skill stats for Fork Lightning (levels 1-2)
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 1, 1, 180);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 1, 2, 15);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 2, 1, 220);
+INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 2, 2, 20);
 
 -------------
 -- WENGINES --
