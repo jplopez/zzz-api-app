@@ -36,4 +36,15 @@ public class DiscDriveSet extends RepresentationModel<DiscDriveSet> {
 
   @Column(nullable = true)
   private String fourPieceSkillDescription;
+
+  // Manual getter for ID to ensure it's available
+  public String getId() {
+    return id;
+  }
+
+  // Manual setter for ID 
+  public void setId(String id) {
+    this.id = id;
+  }
+
 }

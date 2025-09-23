@@ -40,4 +40,14 @@ public class Bangboo extends RepresentationModel<Bangboo>
   @Column(nullable = true)
   private String faction;
 
+  // Manual getter for ID to ensure it's available
+  public String getId() {
+    return id;
+  }
+
+  // Manual setter for ID 
+  public void setId(String id) {
+    this.id = id;
+  }
+
 }
