@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 /**
@@ -33,9 +33,9 @@ public interface AgentsRepository extends JpaRepository<Agent, String> {
 
   List<Agent> findByAttributeIn(Collection<Attributes> attributes);
 
-  List<Agent> findBySpeciality(Specialities speciality);
+  List<Agent> findBySpeciality(Specialties speciality);
 
-  List<Agent> findBySpecialityIn(Collection<Specialities> specialities);
+  List<Agent> findBySpecialityIn(Collection<Specialties> specialities);
 
   List<Agent> findByType(Type type);
 
@@ -50,5 +50,5 @@ public interface AgentsRepository extends JpaRepository<Agent, String> {
   List<Agent> findByVersionIn(Collection<Float> versions);
 
   List<Agent> findByNameOrRarityOrAttributeOrSpecialityOrTypeOrFactionOrVersion(
-      String name, Rarity rarity, Attributes attribute, Specialities speciality, Type type, String faction, Float version);
+      String name, Rarity rarity, Attributes attribute, Specialties speciality, Type type, String faction, Float version);
 }

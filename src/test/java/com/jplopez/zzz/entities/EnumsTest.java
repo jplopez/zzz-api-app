@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,7 +21,7 @@ public class EnumsTest {
 
   Attributes[] attributes = Attributes.values();
   Rarity[] values = Rarity.values();
-  Specialities[] specs = Specialities.values();
+  Specialties[] specs = Specialties.values();
   Type[] type = Type.values();
 
   @Test
@@ -74,11 +74,11 @@ public class EnumsTest {
   void testSpecialitiesValues() {
     Arrays.stream(specs).forEach(en -> {
       assertThat(en, oneOf(
-          Specialities.ANOMALY,
-          Specialities.ATTACK,
-          Specialities.SHIELD,
-          Specialities.STUN,
-          Specialities.SUPPORT));
+          Specialties.ANOMALY,
+          Specialties.ATTACK,
+          Specialties.SHIELD,
+          Specialties.STUN,
+          Specialties.SUPPORT));
     });
   }
 

@@ -1,12 +1,12 @@
 package com.jplopez.zzz.entities;
 
-import java.util.List;
-
 import org.springframework.hateoas.RepresentationModel;
 
-import com.jplopez.zzz.entities.skills.SkillModifier;
+import com.jplopez.zzz.entities.converter.RarityConverter;
+import com.jplopez.zzz.entities.enums.Rarity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,23 +19,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Skill extends RepresentationModel<Skill> {
+public class Bangboo extends RepresentationModel<Bangboo>
+ {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @EqualsAndHashCode.Exclude
   private String id;
 
-  @Column(nullable = false)
-  private String agentId;
+  @Column(nullable = false, unique = true)
+  private String bangbooId;
 
-  @Column(nullable = false)
-  private String type;
-
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = false)
-  private String description;
+  @Column(nullable = true)
+  @Convert(converter = RarityConverter.class)
+  private Rarity rarity;
 
-  private List<SkillModifier> modifiers;
+  @Column(nullable = true)
+  private String faction;
+
 }

@@ -5,6 +5,6 @@ package com.jplopez.zzz.entities.enums;
  * 
  * @since 1.0
  */
-public enum Specialities {
+public enum Specialties {
   ANOMALY, ATTACK, SHIELD, STUN, SUPPORT;
 }

@@ -13,33 +13,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
-import com.jplopez.zzz.entities.Wengine;
+import com.jplopez.zzz.entities.WEngine;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
-import com.jplopez.zzz.mocks.WengineMock;
+import com.jplopez.zzz.entities.enums.Specialties;
+import com.jplopez.zzz.mocks.WEngineMock;
 
 /**
  * @since 1.0
  */
 @SpringBootTest(classes = ZzzApiAppApplication.class)
-class WengineRepositoryUnitTest {
+class WEngineRepositoryUnitTest {
 
   @Autowired
-  private WengineRepository repo;
+  private WEngineRepository repo;
 
   @Test
   void saveAndFindTest() {
-    Wengine testWengine = WengineMock.streetSuperstarMockWengine();
-    Wengine saved = repo.save(testWengine);
+    WEngine testWEngine = WEngineMock.streetSuperstarMockWEngine();
+    WEngine saved = repo.save(testWEngine);
     assertNotNull(saved);
     assertNotNull(saved.getId());
     
-    Optional<Wengine> found = repo.findById(saved.getId());
+    Optional<WEngine> found = repo.findById(saved.getId());
     assertFalse(found.isEmpty());
-    Wengine obtained = found.get();
+    WEngine obtained = found.get();
     assertEquals("Street Superstar", obtained.getName());
     assertEquals(Rarity.S, obtained.getRarity());
-    assertEquals(Specialities.ATTACK, obtained.getSpecialty());
+    assertEquals(Specialties.ATTACK, obtained.getSpecialty());
     assertEquals(594, obtained.getBaseAttack());
     assertNotNull(obtained.getSkillDescriptions());
     assertFalse(obtained.getSkillDescriptions().isEmpty());
@@ -47,58 +47,58 @@ class WengineRepositoryUnitTest {
 
   @Test
   void findByNameTest() {
-    Wengine testWengine = WengineMock.cannonRoamerMockWengine();
-    testWengine.setWengineId("test-cannon-roamer");
-    repo.save(testWengine);
+    WEngine testWEngine = WEngineMock.cannonRoamerMockWEngine();
+    testWEngine.setWengineId("test-cannon-roamer");
+    repo.save(testWEngine);
     
-    List<Wengine> results = repo.findByNameIgnoreCase("Cannon Roamer");
+    List<WEngine> results = repo.findByNameIgnoreCase("Cannon Roamer");
     assertFalse(results.isEmpty());
     assertThat(results, hasItem(hasProperty("name", is("Cannon Roamer"))));
   }
 
   @Test
   void findByRarityTest() {
-    Wengine testWengine = WengineMock.steamOvenMockWengine();
-    testWengine.setWengineId("test-steam-oven");
-    repo.save(testWengine);
+    WEngine testWEngine = WEngineMock.steamOvenMockWEngine();
+    testWEngine.setWengineId("test-steam-oven");
+    repo.save(testWEngine);
     
-    List<Wengine> results = repo.findByRarity(Rarity.A);
+    List<WEngine> results = repo.findByRarity(Rarity.A);
     assertFalse(results.isEmpty());
     assertThat(results, hasItem(hasProperty("rarity", is(Rarity.A))));
   }
 
   @Test
   void findBySpecialtyTest() {
-    Wengine testWengine = WengineMock.streetSuperstarMockWengine();
-    testWengine.setWengineId("test-street-superstar");
-    repo.save(testWengine);
+    WEngine testWEngine = WEngineMock.streetSuperstarMockWEngine();
+    testWEngine.setWengineId("test-street-superstar");
+    repo.save(testWEngine);
     
-    List<Wengine> results = repo.findBySpecialty(Specialities.ATTACK);
+    List<WEngine> results = repo.findBySpecialty(Specialties.ATTACK);
     assertFalse(results.isEmpty());
-    assertThat(results, hasItem(hasProperty("specialty", is(Specialities.ATTACK))));
+    assertThat(results, hasItem(hasProperty("specialty", is(Specialties.ATTACK))));
   }
 
   @Test
   void findByBaseAttackTest() {
-    Wengine testWengine = WengineMock.cannonRoamerMockWengine();
-    testWengine.setWengineId("test-cannon-roamer-2");
-    repo.save(testWengine);
+    WEngine testWEngine = WEngineMock.cannonRoamerMockWEngine();
+    testWEngine.setWengineId("test-cannon-roamer-2");
+    repo.save(testWEngine);
     
-    List<Wengine> results = repo.findByBaseAttack(624);
+    List<WEngine> results = repo.findByBaseAttack(624);
     assertFalse(results.isEmpty());
     assertThat(results, hasItem(hasProperty("baseAttack", is(624))));
   }
 
   @Test
   void findByBaseAttackBetweenTest() {
-    Wengine testWengine1 = WengineMock.streetSuperstarMockWengine();
-    testWengine1.setWengineId("test-street-between-1");
-    Wengine testWengine2 = WengineMock.cannonRoamerMockWengine();
-    testWengine2.setWengineId("test-cannon-between-2");
-    repo.save(testWengine1);
-    repo.save(testWengine2);
+    WEngine testWEngine1 = WEngineMock.streetSuperstarMockWEngine();
+    testWEngine1.setWengineId("test-street-between-1");
+    WEngine testWEngine2 = WEngineMock.cannonRoamerMockWEngine();
+    testWEngine2.setWengineId("test-cannon-between-2");
+    repo.save(testWEngine1);
+    repo.save(testWEngine2);
     
-    List<Wengine> results = repo.findByBaseAttackBetween(500, 700);
+    List<WEngine> results = repo.findByBaseAttackBetween(500, 700);
     assertFalse(results.isEmpty());
     assertThat(results.size(), greaterThanOrEqualTo(2));
   }

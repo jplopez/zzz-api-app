@@ -22,7 +22,7 @@ public class AttributesConverter implements AttributeConverter<Attributes, Strin
 
   @Override
   public String convertToDatabaseColumn(Attributes attribute) {
-    if (attribute == null) return null;
+    if (attribute == null) return "";
     return attribute.name();
   }
 

@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.jplopez.zzz.entities.Wengine;
+import com.jplopez.zzz.entities.WEngine;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 
 /**
  * Repository to read data of Wengines.
@@ -17,26 +17,32 @@ import com.jplopez.zzz.entities.enums.Specialities;
  * @since 1.0
  */
 @Repository
-public interface WengineRepository extends JpaRepository<Wengine, String> {
+public interface WEngineRepository extends JpaRepository<WEngine, String> {
 
-  List<Wengine> findByNameIgnoreCase(String name);
+  List<WEngine> findByNameIgnoreCase(String name);
 
-  List<Wengine> findByNameContaining(String input);
+  List<WEngine> findByNameContaining(String input);
 
-  List<Wengine> findByRarity(Rarity rarity);
+  List<WEngine> findByRarity(Rarity rarity);
 
-  List<Wengine> findByRarityIn(Collection<Rarity> rarities);
+  List<WEngine> findByRarityIn(Collection<Rarity> rarities);
 
-  List<Wengine> findBySpecialty(Specialities specialty);
+  List<WEngine> findBySpecialty(Specialties specialty);
 
-  List<Wengine> findBySpecialtyIn(Collection<Specialities> specialties);
+  List<WEngine> findBySpecialtyIn(Collection<Specialties> specialties);
 
-  List<Wengine> findByBaseAttack(Integer baseAttack);
+  List<WEngine> findByBaseAttack(Integer baseAttack);
 
-  List<Wengine> findByBaseAttackBetween(Integer from, Integer to);
+  List<WEngine> findByBaseAttackBetween(Integer from, Integer to);
 
-  List<Wengine> findByDescriptionContaining(String input);
+  List<WEngine> findByDescriptionContaining(String input);
 
-  List<Wengine> findByNameOrRarityOrSpecialtyOrBaseAttack(
-      String name, Rarity rarity, Specialities specialty, Integer baseAttack);
+  List<WEngine> findByVersion(Float version);
+
+  List<WEngine> findByVersionBetween(Float from, Float to);
+
+  List<WEngine> findByVersionIn(Collection<Float> versions);
+
+  List<WEngine> findByNameOrRarityOrSpecialtyOrBaseAttack(
+      String name, Rarity rarity, Specialties specialty, Integer baseAttack);
 }

@@ -1,10 +1,6 @@
 package com.jplopez.zzz.entities;
 
-import java.util.List;
-
 import org.springframework.hateoas.RepresentationModel;
-
-import com.jplopez.zzz.entities.skills.SkillModifier;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,23 +15,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class Skill extends RepresentationModel<Skill> {
+public class DiscDriveSet extends RepresentationModel<DiscDriveSet> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @EqualsAndHashCode.Exclude
   private String id;
 
-  @Column(nullable = false)
-  private String agentId;
+  @Column(nullable = false, unique = true)
+  private String discDriveSetId;
 
-  @Column(nullable = false)
-  private String type;
-
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String description;
 
-  private List<SkillModifier> modifiers;
+  @Column(nullable = true)
+  private String twoPieceSkillDescription;
+
+  @Column(nullable = true)
+  private String fourPieceSkillDescription;
 }

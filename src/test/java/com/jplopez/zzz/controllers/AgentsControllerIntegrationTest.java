@@ -5,7 +5,7 @@ import com.jplopez.zzz.common.EnumUtils;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 import static io.restassured.RestAssured.*;
@@ -130,14 +130,14 @@ class AgentsControllerIntegrationTest {
 
   @Test
   void whenFindAgentBySpecialty_thenOK() {
-    String path = "/speciality/" + Specialities.ATTACK.toString();
+    String path = "/speciality/" + Specialties.ATTACK.toString();
     Response response = given().get(path);
 
     response.then().assertThat().statusCode(HttpStatus.OK.value());
     List<Agent> agents = response.as(new TypeRef<List<Agent>>() {
     });
     assertThat(agents, everyItem(
-        hasProperty("speciality", is(Specialities.ATTACK))));
+        hasProperty("speciality", is(Specialties.ATTACK))));
   }
 
   @Test

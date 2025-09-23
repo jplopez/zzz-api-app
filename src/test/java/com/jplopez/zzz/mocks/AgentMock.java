@@ -9,7 +9,7 @@ import java.util.Random;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 
@@ -22,7 +22,7 @@ public class AgentMock {
     Agent a = new Agent("1", "1", "Lycaon");
     a.setRarity(Rarity.S);
     a.setAttribute(Attributes.ICE);
-    a.setSpeciality(Specialities.STUN);
+    a.setSpeciality(Specialties.STUN);
     a.setType(Type.STRIKE);
     a.setFaction("Victoria Housekeeping");
     a.setVersion(1.0f);
@@ -33,7 +33,7 @@ public class AgentMock {
     Agent a = new Agent("2", "2", "Zhu Yuan");
     a.setRarity(Rarity.S);
     a.setAttribute(Attributes.ETHER);
-    a.setSpeciality(Specialities.ATTACK);
+    a.setSpeciality(Specialties.ATTACK);
     a.setType(Type.PIERCE);
     a.setFaction("N.E.P.S");
     a.setVersion(1.1f);
@@ -44,7 +44,7 @@ public class AgentMock {
     Agent a = new Agent("3", "3", "Burnice");
     a.setRarity(Rarity.S);
     a.setAttribute(Attributes.FIRE);
-    a.setSpeciality(Specialities.ANOMALY);
+    a.setSpeciality(Specialties.ANOMALY);
     a.setType(Type.PIERCE);
     a.setFaction("Sons of Calydon");
     a.setVersion(1.2f);

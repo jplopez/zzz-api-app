@@ -15,7 +15,7 @@ import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.Skill;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 import com.jplopez.zzz.repositories.AgentsRepository;
 import com.jplopez.zzz.repositories.SkillsRepository;
@@ -87,7 +87,7 @@ public class AgentsController extends ZZZController<Agent,AgentsRepository> {
   }
 
   @GetMapping("/speciality/{value}")
-  public List<Agent> findBySpeciality(@PathVariable("value") Specialities spec) {
+  public List<Agent> findBySpeciality(@PathVariable("value") Specialties spec) {
     return repository.findBySpeciality(spec);
   }
 

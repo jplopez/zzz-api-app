@@ -8,7 +8,7 @@ import com.jplopez.zzz.entities.converter.SpecialityConverter;
 import com.jplopez.zzz.entities.converter.TypeConverter;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 import jakarta.persistence.Column;
@@ -61,7 +61,7 @@ public class Agent extends RepresentationModel<Agent> {
 
   @Column(nullable = true)
   @Convert(converter = SpecialityConverter.class)
-  private Specialities speciality;
+  private Specialties speciality;
 
   @Column(nullable = true)
   @Convert(converter = TypeConverter.class)

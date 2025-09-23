@@ -22,7 +22,7 @@ public class RarityConverter implements AttributeConverter<Rarity, String> {
 
   @Override
   public String convertToDatabaseColumn(Rarity rarity) {
-    if (rarity == null) return null;
+    if (rarity == null) return "";
     return rarity.name();
   }
 

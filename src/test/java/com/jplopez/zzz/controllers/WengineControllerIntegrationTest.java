@@ -15,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import com.jplopez.zzz.entities.Wengine;
+import com.jplopez.zzz.entities.WEngine;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
@@ -53,7 +53,7 @@ class WengineControllerIntegrationTest {
     Response response = given().get(path);
 
     response.then().assertThat().statusCode(HttpStatus.OK.value());
-    List<Wengine> wengines = response.as(new TypeRef<List<Wengine>>() {
+    List<WEngine> wengines = response.as(new TypeRef<List<WEngine>>() {
     });
     assertFalse(wengines.isEmpty());
     assertThat(wengines, hasItem(hasProperty("rarity", is(Rarity.S))));
@@ -61,14 +61,14 @@ class WengineControllerIntegrationTest {
 
   @Test
   void whenFindWengineBySpecialty_thenOK() {
-    String path = "/wengines/specialty/" + Specialities.ATTACK.toString();
+    String path = "/wengines/specialty/" + Specialties.ATTACK.toString();
     Response response = given().get(path);
 
     response.then().assertThat().statusCode(HttpStatus.OK.value());
-    List<Wengine> wengines = response.as(new TypeRef<List<Wengine>>() {
+    List<WEngine> wengines = response.as(new TypeRef<List<WEngine>>() {
     });
     assertFalse(wengines.isEmpty());
-    assertThat(wengines, hasItem(hasProperty("specialty", is(Specialities.ATTACK))));
+    assertThat(wengines, hasItem(hasProperty("specialty", is(Specialties.ATTACK))));
   }
 
   @Test
@@ -77,7 +77,7 @@ class WengineControllerIntegrationTest {
     Response response = given().get(path);
 
     response.then().assertThat().statusCode(HttpStatus.OK.value());
-    List<Wengine> wengines = response.as(new TypeRef<List<Wengine>>() {
+    List<WEngine> wengines = response.as(new TypeRef<List<WEngine>>() {
     });
     assertFalse(wengines.isEmpty());
     assertThat(wengines, hasItem(hasProperty("baseAttack", is(594))));

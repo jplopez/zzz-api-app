@@ -21,7 +21,7 @@ import com.jplopez.zzz.app.ZzzApiAppApplication;
 import com.jplopez.zzz.entities.Agent;
 import com.jplopez.zzz.entities.enums.Attributes;
 import com.jplopez.zzz.entities.enums.Rarity;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 import com.jplopez.zzz.entities.enums.Type;
 
 /**
@@ -47,7 +47,7 @@ class AgentsRepositoryUnitTest {
     assertEquals("Zhu Yuan", obtained.getFullName());
     assertEquals(Rarity.S, obtained.getRarity());
     assertEquals(Attributes.ETHER, obtained.getAttribute());
-    assertEquals(Specialities.ATTACK, obtained.getSpeciality());
+    assertEquals(Specialties.ATTACK, obtained.getSpeciality());
     assertNotNull(obtained.getAgentId());
     assertEquals(Type.PIERCE,obtained.getType());
   }
@@ -117,14 +117,14 @@ class AgentsRepositoryUnitTest {
 
   @Test
   void findByOneSpecialty_thenReturnMany() {
-    Iterable<Agent> agents = repo.findBySpeciality(Specialities.ATTACK);
+    Iterable<Agent> agents = repo.findBySpeciality(Specialties.ATTACK);
     assertThat(agents, everyItem(
-        hasProperty("speciality", is(Specialities.ATTACK))));
+        hasProperty("speciality", is(Specialties.ATTACK))));
   }
 
   @Test
   void findByManySpecialty_thenReturnMany() {
-    List<Specialities> specs = Arrays.asList(Specialities.ANOMALY, Specialities.SHIELD, Specialities.SUPPORT);
+    List<Specialties> specs = Arrays.asList(Specialties.ANOMALY, Specialties.SHIELD, Specialties.SUPPORT);
 
     Iterable<Agent> agents = repo.findBySpecialityIn(specs);
     assertThat(agents, everyItem(
@@ -206,7 +206,7 @@ class AgentsRepositoryUnitTest {
   @Disabled("Pending GraphQL integration")
   @Test
   void searchBySpeciality_thenReturnOne() {
-    Specialities spec = Specialities.ATTACK;
+    Specialties spec = Specialties.ATTACK;
     // rarity and attackStyle
     Iterable<Agent> agents = repo.findByNameOrRarityOrAttributeOrSpecialityOrTypeOrFactionOrVersion(
       null, null, null, spec, null, null, null);
