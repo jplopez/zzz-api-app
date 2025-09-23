@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jplopez.zzz.common.exceptions.ZZZEntityNotFoundException;
 import com.jplopez.zzz.entities.Bangboo;
+import com.jplopez.zzz.entities.BangbooStat;
 import com.jplopez.zzz.entities.enums.Rarity;
 import com.jplopez.zzz.repositories.BangbooRepository;
+import com.jplopez.zzz.repositories.BangbooStatRepository;
 
 /**
  * Rest Controller to retrieve data from Bangboos
@@ -25,8 +28,11 @@ import com.jplopez.zzz.repositories.BangbooRepository;
 @RequestMapping(path = { "/bangboos", "/b" })
 public class BangbooController extends ZZZController<Bangboo, BangbooRepository> {
 
-  BangbooController(BangbooRepository repository) {
+  private final BangbooStatRepository bangbooStatRepository;
+
+  BangbooController(BangbooRepository repository, BangbooStatRepository bangbooStatRepository) {
       super("bangboos", repository);
+      this.bangbooStatRepository = bangbooStatRepository;
   }
 
   @Override
@@ -97,5 +103,60 @@ public class BangbooController extends ZZZController<Bangboo, BangbooRepository>
       bangboo.add(linkTo(methodOn(BangbooController.class).findOne(bangboo.getId())).withSelfRel());
     }
     return results;
+  }
+
+  /**
+   * Get all stats for a specific bangboo ordered by level
+   * @param id the bangboo ID
+   * @return list of stats ordered by level ascending
+   */
+  @GetMapping("/{id}/stats")
+  public List<BangbooStat> getBangbooStats(@PathVariable String id) {
+    // Verify bangboo exists
+    repository.findById(id)
+        .orElseThrow(ZZZEntityNotFoundException::new);
+
+    List<BangbooStat> stats = bangbooStatRepository.findByBangbooIdOrderByLevelAsc(id);
+    
+    // Add HATEOAS links to each stat
+    for(BangbooStat stat : stats) {
+      stat.add(linkTo(methodOn(BangbooController.class).getBangbooStatByLevel(id, stat.getLevel())).withSelfRel());
+    }
+    
+    return stats;
+  }
+
+  /**
+   * Get stats for a specific bangboo at a specific level with HATEOAS navigation links
+   * @param id the bangboo ID
+   * @param level the level (1-60)
+   * @return bangboo stat with navigation links
+   */
+  @GetMapping("/{id}/stats/{level}")
+  public BangbooStat getBangbooStatByLevel(@PathVariable String id, @PathVariable int level) {
+    // Verify bangboo exists
+    repository.findById(id)
+        .orElseThrow(ZZZEntityNotFoundException::new);
+
+    BangbooStat stat = bangbooStatRepository.findByBangbooIdAndLevel(id, level)
+        .orElseThrow(ZZZEntityNotFoundException::new);
+
+    // Add self link
+    stat.add(linkTo(methodOn(BangbooController.class).getBangbooStatByLevel(id, level)).withSelfRel());
+    
+    // Add link to all stats
+    stat.add(linkTo(methodOn(BangbooController.class).getBangbooStats(id)).withRel("allStats"));
+    
+    // Add previous level link if not level 1
+    if (level > 1) {
+      stat.add(linkTo(methodOn(BangbooController.class).getBangbooStatByLevel(id, level - 1)).withRel("prev"));
+    }
+    
+    // Add next level link if not level 60
+    if (level < 60) {
+      stat.add(linkTo(methodOn(BangbooController.class).getBangbooStatByLevel(id, level + 1)).withRel("next"));
+    }
+    
+    return stat;
   }
 }
