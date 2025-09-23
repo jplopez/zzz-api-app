@@ -131,3 +131,97 @@ INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES
 (@wengine_id, 'Increases ATK by 15%.');
 INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES 
 (@wengine_id, 'When the equipped character uses an EX Special Attack, all squad members'' DMG increases by 10% for 10s.');
+
+
+--------------
+-- BANGBOOS --
+--------------
+
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b1', 'BB001', 'Butler', 'S', 'Victoria Housekeeping');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b2', 'BB002', 'Amillion', 'S', 'Obol Squad');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b3', 'BB003', 'Rocketboo', 'S', 'Cunning Hares');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b4', 'BB004', 'Bangvolver', 'A', 'Cunning Hares');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b5', 'BB005', 'Boollseye', 'A', 'Belobog Heavy Industries');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b6', 'BB006', 'Electroboo', 'A', 'Belobog Heavy Industries');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b7', 'BB007', 'Magnetiboo', 'A', 'Belobog Heavy Industries');
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b8', 'BB008', 'Penguinboo', 'B', null);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION) VALUES
+('b9', 'BB009', 'Paperboo', 'B', null);
+
+--------------------
+-- DISC DRIVE SETS --
+--------------------
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds1', 'DDS001', 'Woodpecker Electro', 'A disc set focused on electric damage amplification', 'Increases Electric DMG by 10%.', 'Upon hitting an enemy with a Basic Attack, Dash Attack, or Dodge Counter, the equipped character''s CRIT Rate increases by 20% for 8s.');
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds2', 'DDS002', 'Puffer Electro', 'Electric-focused disc set for anomaly mastery', 'Increases Electric DMG by 10%.', 'When the equipped character triggers an Electric Attribute Anomaly, Electric DMG increases by 15% for 10s.');
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds3', 'DDS003', 'Inferno Metal', 'Fire damage amplification disc set', 'Increases Fire DMG by 10%.', 'Upon hitting a Burning enemy with an attack, the equipped character''s ATK increases by 15% for 10s.');
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds4', 'DDS004', 'Polar Metal', 'Ice damage focused disc set', 'Increases Ice DMG by 10%.', 'Upon hitting a Frozen enemy, CRIT DMG increases by 25% for 10s.');
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds5', 'DDS005', 'Shockstar Disco', 'Physical damage enhancement disc set', 'Increases Physical DMG by 10%.', 'When the equipped character uses a Dodge Counter or Assist Attack, their CRIT Rate increases by 15% for 10s.');
+
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('dds6', 'DDS006', 'Thunder Metal', 'Electric damage disc set for attackers', 'Increases Electric DMG by 10%.', 'When launching a Chain Attack or Ultimate, Electric DMG increases by 20% for 10s.');
+
+------------------
+-- DISC DRIVES --
+------------------
+
+-- Woodpecker Electro set pieces
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd1', 'DD001', 1, 'HP', 2780.0, 'dds1');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd2', 'DD002', 2, 'ATK', 134.0, 'dds1');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd3', 'DD003', 3, 'DEF', 105.0, 'dds1');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd4', 'DD004', 4, 'ATK_PER', 30.0, 'dds1');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd5', 'DD005', 5, 'ELECTRIC_DMG', 24.0, 'dds1');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd6', 'DD006', 6, 'CRIT_RATE', 8.0, 'dds1');
+
+-- Puffer Electro set pieces
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd7', 'DD007', 1, 'HP', 2890.0, 'dds2');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd8', 'DD008', 2, 'ATK', 140.0, 'dds2');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd9', 'DD009', 3, 'DEF', 110.0, 'dds2');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd10', 'DD010', 4, 'HP_PER', 30.0, 'dds2');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd11', 'DD011', 5, 'ANOMALY_MASTERY', 58.0, 'dds2');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd12', 'DD012', 6, 'ELECTRIC_DMG', 24.0, 'dds2');
+
+-- Inferno Metal set pieces
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd13', 'DD013', 1, 'HP', 2820.0, 'dds3');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd14', 'DD014', 2, 'ATK', 138.0, 'dds3');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd15', 'DD015', 4, 'ATK_PER', 30.0, 'dds3');
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd16', 'DD016', 5, 'FIRE_DMG', 24.0, 'dds3');
+
+-- Test entries with null values to test edge cases
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd17', 'DD017', null, null, null, null);
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('dd18', 'DD018', 3, 'DEF', 0.0, 'dds4');

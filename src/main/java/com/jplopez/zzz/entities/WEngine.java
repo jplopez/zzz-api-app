@@ -1,7 +1,7 @@
 package com.jplopez.zzz.entities;
 
 import com.jplopez.zzz.entities.converter.SpecialityConverter;
-import com.jplopez.zzz.entities.enums.Specialities;
+import com.jplopez.zzz.entities.enums.Specialties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-public class WEngine extends RepresentationModel<Agent> {
+public class WEngine extends RepresentationModel<WEngine> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +33,7 @@ public class WEngine extends RepresentationModel<Agent> {
 
   @Column(nullable = false)
   @Convert(converter = SpecialityConverter.class)
-  private Specialities speciality;
+  private Specialties speciality;
 
   @Column(nullable = true)
   private int baseValue;
@@ -51,7 +51,7 @@ public class WEngine extends RepresentationModel<Agent> {
   private String skillDescription;
 
   // Constructor with fields
-  public WEngine(String id, String name, Specialities speciality) {
+  public WEngine(String id, String name, Specialties speciality) {
     this.id = id;
     this.name = name;
     this.speciality = speciality;

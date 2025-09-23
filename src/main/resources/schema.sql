@@ -38,3 +38,32 @@ create table if not exists SKILL(
   PRIMARY KEY ( ID ),
   FOREIGN KEY (AGENT_ID) REFERENCES public.AGENT(ID)
 );
+
+create table if not exists BANGBOO(
+  ID varchar(255) not null,
+  BANGBOO_ID varchar(255) not null UNIQUE,
+  NAME varchar(100) not null UNIQUE,
+  RARITY varchar(1) null,
+  FACTION varchar(200) null,
+  PRIMARY KEY ( ID )
+);
+
+create table if not exists DISC_DRIVE_SET(
+  ID varchar(255) not null,
+  DISC_DRIVE_SET_ID varchar(255) not null UNIQUE,
+  NAME varchar(100) not null UNIQUE,
+  DESCRIPTION varchar(1000) null,
+  TWO_PIECE_SKILL_DESCRIPTION varchar(1000) null,
+  FOUR_PIECE_SKILL_DESCRIPTION varchar(1000) null,
+  PRIMARY KEY ( ID )
+);
+
+create table if not exists DISC_DRIVE(
+  ID varchar(255) not null,
+  DISC_DRIVE_ID varchar(255) not null UNIQUE,
+  POSITION int null,
+  TYPE varchar(20) null,
+  BASE_VALUE float null,
+  DISC_DRIVE_SET_ID varchar(255) null,
+  PRIMARY KEY ( ID )
+);
