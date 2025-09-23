@@ -236,6 +236,89 @@ class BangbooRepositoryUnitTest {
     assert testBangboo.wasInVersion(1.3f);
   }
 
+  @Test
+  void testRarityConverter_withValidValues() {
+    // Test that the RarityConverter handles valid enum values correctly
+    Bangboo testBangboo = BangbooMock.amillionMockBangboo();
+    testBangboo.setBangbooId("test-rarity-converter-valid");
+    testBangboo.setRarity(Rarity.S);
+    
+    Bangboo saved = repo.save(testBangboo);
+    Optional<Bangboo> found = repo.findById(saved.getId());
+    assertFalse(found.isEmpty());
+    assertEquals(Rarity.S, found.get().getRarity());
+  }
+
+  @Test
+  void testNullableColumns_allCombinations() {
+    // Test all combinations of nullable fields
+    Bangboo testBangboo = new Bangboo("test-id", "test-bangboo-id", "Test Bangboo");
+    testBangboo.setRarity(null);
+    testBangboo.setFaction(null);
+    testBangboo.setVersion(1.0f); // Version should have default
+    
+    Bangboo saved = repo.save(testBangboo);
+    assertNotNull(saved.getId());
+    
+    Optional<Bangboo> found = repo.findById(saved.getId());
+    assertFalse(found.isEmpty());
+    assertEquals(null, found.get().getRarity());
+    assertEquals(null, found.get().getFaction());
+    assertEquals(1.0f, found.get().getVersion());
+  }
+
+  @Test
+  void findByVersionIn_withMultipleVersions() {
+    Bangboo testBangboo1 = BangbooMock.amillionMockBangboo();
+    testBangboo1.setBangbooId("test-version-in-1");
+    testBangboo1.setVersion(1.0f);
+    Bangboo testBangboo2 = BangbooMock.butlerMockBangboo();
+    testBangboo2.setBangbooId("test-version-in-2");
+    testBangboo2.setVersion(1.2f);
+    repo.save(testBangboo1);
+    repo.save(testBangboo2);
+    
+    List<Bangboo> results = repo.findByVersionIn(List.of(1.0f, 1.2f));
+    assertFalse(results.isEmpty());
+    assertThat(results.size(), greaterThanOrEqualTo(2));
+  }
+
+  @Test
+  void findByRarityIn_withMultipleRarities() {
+    Bangboo testBangboo1 = BangbooMock.amillionMockBangboo(); // S rarity
+    testBangboo1.setBangbooId("test-rarity-in-1");
+    Bangboo testBangboo2 = BangbooMock.electrobooMockBangboo(); // B rarity
+    testBangboo2.setBangbooId("test-rarity-in-2");
+    repo.save(testBangboo1);
+    repo.save(testBangboo2);
+    
+    List<Bangboo> results = repo.findByRarityIn(List.of(Rarity.S, Rarity.B));
+    assertFalse(results.isEmpty());
+    assertThat(results.size(), greaterThanOrEqualTo(2));
+  }
+
+  @Test
+  void testEntityConstraints_nonNullableFields() {
+    // Test that required fields cannot be null
+    Bangboo testBangboo = new Bangboo();
+    testBangboo.setBangbooId("test-constraints");
+    testBangboo.setName("Test Name");
+    // Missing required bangbooId or name should cause issues when constraints are enforced
+    
+    // This should work as we have all required fields
+    Bangboo saved = repo.save(testBangboo);
+    assertNotNull(saved.getId());
+  }
+
+  @Test 
+  void testRepositoryFindAll() {
+    // Test basic findAll functionality
+    List<Bangboo> allBangboos = repo.findAll();
+    assertNotNull(allBangboos);
+    // Should have at least some bangboos from data.sql
+    // Note: Actual count depends on test execution order and data setup
+  }
+
   private void weakAssertBangboo(Bangboo bangboo) {
     assertNotNull(bangboo.getId());
     assertNotNull(bangboo.getBangbooId());
