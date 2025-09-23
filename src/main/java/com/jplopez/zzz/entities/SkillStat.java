@@ -1,32 +1,38 @@
 package com.jplopez.zzz.entities;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity
-public class Skill extends RepresentationModel<Skill> {
+public class SkillStat {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private String id;
 
   @Column(nullable = false)
-  private String type;
+  private String skillId;
 
   @Column(nullable = false)
-  private String name;
+  private int level;
 
   @Column(nullable = false)
-  private String description;
+  private int tokenPosition;
+
+  @Column(nullable = false)
+  private float tokenValue;
+
+  public SkillStat(String skillId, int level, int tokenPosition, float tokenValue) {
+    this.skillId = skillId;
+    this.level = level;
+    this.tokenPosition = tokenPosition;
+    this.tokenValue = tokenValue;
+  }
 }

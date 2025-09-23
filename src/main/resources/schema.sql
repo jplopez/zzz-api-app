@@ -31,12 +31,29 @@ create table if not exists WENGINE_SKILL_DESCRIPTIONS(
 
 create table if not exists SKILL(
   ID int not null AUTO_INCREMENT,
-  AGENT_ID int not null,
   TYPE VARCHAR(15) NOT NULL,
   NAME varchar(200) not null,
   DESCRIPTION varchar(1000) NOT null,
+  PRIMARY KEY ( ID )
+);
+
+create table if not exists AGENT_SKILL(
+  ID int not null AUTO_INCREMENT,
+  SKILL_ID int not null,
+  AGENT_ID int not null,
   PRIMARY KEY ( ID ),
+  FOREIGN KEY (SKILL_ID) REFERENCES public.SKILL(ID),
   FOREIGN KEY (AGENT_ID) REFERENCES public.AGENT(ID)
+);
+
+create table if not exists SKILL_STAT(
+  ID int not null AUTO_INCREMENT,
+  SKILL_ID int not null,
+  LEVEL int not null CHECK (LEVEL > 0),
+  TOKEN_POSITION int not null,
+  TOKEN_VALUE float not null,
+  PRIMARY KEY ( ID ),
+  FOREIGN KEY (SKILL_ID) REFERENCES public.SKILL(ID)
 );
 
 create table if not exists BANGBOO(
