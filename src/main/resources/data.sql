@@ -131,3 +131,30 @@ INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES
 (@wengine_id, 'Increases ATK by 15%.');
 INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES 
 (@wengine_id, 'When the equipped character uses an EX Special Attack, all squad members'' DMG increases by 10% for 10s.');
+
+--------------
+-- BANGBOOS --
+--------------
+
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('1', 'Amillion', 'S', 'Victoria Housekeeping', 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('2', 'Butler', 'A', 'Victoria Housekeeping', 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('3', 'Pengboo', 'A', 'Belobog Heavy Industries', 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('4', 'Bagboo', 'A', 'Cunning Hares', 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('5', 'Electroboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('6', 'Magnetiboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('7', 'Rocketboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('8', 'Boollseye', 'S', 'Criminal Investigation Special Response Team', 1.1);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('9', 'Officer Cui', 'A', 'Criminal Investigation Special Response Team', 1.1);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('10', 'Crybaby', 'S', 'Sons of Calydon', 1.2);
+INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('11', 'Luckyboo', 'A', 'Sons of Calydon', 1.2);
