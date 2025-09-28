@@ -100,7 +100,7 @@ Base URLs: `/agents` or `/a`
 **Description:** Returns all agents of the specified rarity level.
 
 ### Search Agents by Specialty
-**URL:** `GET /agents/specialty/{value}`  
+**URL:** `GET /agents/speciality/{value}`  
 **Parameters:** `value` (enum) - Agent specialty (ANOMALY, ATTACK, SHIELD, STUN, SUPPORT)  
 **Description:** Returns all agents with the specified combat specialty.
 
@@ -124,7 +124,83 @@ Base URLs: `/agents` or `/a`
 **Parameters:** `from` (float), `to` (float) - Version range  
 **Description:** Returns agents released between the specified versions (inclusive).
 
-**Caveats:** Agent skills and detailed stats are referenced through separate endpoints. Some agent data may be incomplete for unreleased characters.
+### Get Agent Skills
+**URL:** `GET /agents/{agentId}/skills`  
+**Accept:** `application/hal+json`  
+**Parameters:** `agentId` (string) - Agent ID  
+**Description:** Returns all skills for a specific agent with HATEOAS links to individual skill details.
+
+**Example Response:**
+```json
+{
+  "_embedded": {
+    "skillList": [
+      {
+        "id": "skill1",
+        "type": "Basic",
+        "name": "Voltage Spike",
+        "description": "Basic attack skill",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/agents/1/skills/skill1"
+          },
+          "skillStats": {
+            "href": "http://localhost:8080/agents/1/skills/skill1"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/agents/1/skills"
+    }
+  }
+}
+```
+
+### Get Agent Skill with Stats
+**URL:** `GET /agents/{agentId}/skills/{skillId}`  
+**Parameters:** `agentId` (string) - Agent ID, `skillId` (string) - Skill ID  
+**Description:** Returns a specific skill with all its stat progression data across levels.
+
+**Example Response:**
+```json
+{
+  "skill": {
+    "id": "skill1",
+    "type": "Basic",
+    "name": "Voltage Spike",
+    "description": "Basic attack skill"
+  },
+  "skillStats": [
+    {
+      "id": "stat1",
+      "skillId": "skill1",
+      "level": 1,
+      "tokenPosition": 1,
+      "tokenValue": 100.0
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/agents/1/skills/skill1"
+    }
+  }
+}
+```
+
+### Get Agent Skill Stats by Level
+**URL:** `GET /agents/{agentId}/skills/{skillId}/level/{level}`  
+**Parameters:** `agentId` (string) - Agent ID, `skillId` (string) - Skill ID, `level` (int) - Skill level  
+**Description:** Returns skill data with stats for a specific level only.
+
+### Get Agent Skill by ID (Deprecated)
+**URL:** `GET /agents/{agentId}/skill/{skillId}`  
+**Parameters:** `agentId` (string) - Agent ID, `skillId` (string) - Skill ID  
+**Description:** Legacy endpoint that returns skill with stats. Use `/skills/{skillId}` instead.
+
+**Caveats:** Agent skills have level-based stat progression with token positions and values. Some agent data may be incomplete for unreleased characters. The legacy `/skill/` endpoint (singular) is deprecated in favor of `/skills/` (plural).
 
 ## Bangboos API
 
@@ -323,7 +399,7 @@ Base URLs: `/wengines` or `/w`
 **Parameters:** `from` (float), `to` (float) - Version range  
 **Description:** Returns W-Engines released between the specified versions (inclusive).
 
-**Caveats:** W-Engine upgrade statistics from rank 1 to 5 are not yet implemented. Sub-stat scaling by refinement level is not available through the API.
+**Caveats:** W-Engine upgrade statistics from rank 1 to 5 are not yet implemented. Sub-stat scaling by refinement level is not available through the API. Version-based search endpoints may not function correctly as the WEngine entity currently lacks a version field.
 
 ## API Enums Reference
 
