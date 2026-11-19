@@ -109,31 +109,47 @@ INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill3_id, @anby_agent_id)
 INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill4_id, @anby_agent_id);
 INSERT INTO AGENT_SKILL (SKILL_ID, AGENT_ID) VALUES (@skill5_id, @anby_agent_id);
 
--------------------
--- SKILL_STAT --
--------------------
+-- Illustrative base stats for Anby. Values are stored as recorded, not extrapolated.
+INSERT INTO STAT_DEFINITION (ID, AGENT_ID, NAME, ABBR, UNIT) VALUES
+('anby-atk', @anby_agent_id, 'Attack', 'ATK', 'number'),
+('anby-def', @anby_agent_id, 'Defense', 'DEF', 'number'),
+('anby-hp', @anby_agent_id, 'Health', 'HP', 'number'),
+('anby-crit-rate', @anby_agent_id, 'Crit Rate', 'CRIT_RATE', 'percentage'),
+('anby-crit-dmg', @anby_agent_id, 'Crit Damage', 'CRIT_DMG', 'percentage');
 
--- Skill stats for Turbo Volt (levels 1-3)
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 1, 1, 4);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 1, 2, 150);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 2, 1, 4);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 2, 2, 175);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 3, 1, 4);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill1_id, 3, 2, 200);
+INSERT INTO STAT_VALUE (STAT_ID, LEVEL, AMOUNT) VALUES
+('anby-atk', 1, 10), ('anby-atk', 2, 12), ('anby-atk', 3, 14),
+('anby-def', 1, 8), ('anby-def', 2, 9), ('anby-def', 3, 10),
+('anby-hp', 1, 100), ('anby-hp', 2, 110), ('anby-hp', 3, 120),
+('anby-crit-rate', 1, 5), ('anby-crit-rate', 2, 5), ('anby-crit-rate', 3, 5),
+('anby-crit-dmg', 1, 50), ('anby-crit-dmg', 2, 50), ('anby-crit-dmg', 3, 50);
 
--- Skill stats for Thunderbolt (levels 1-3)
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 1, 1, 120);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 1, 2, 2);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 2, 1, 140);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 2, 2, 2.5);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 3, 1, 160);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill2_id, 3, 2, 3);
+-- A skill stat explicitly maps to one token in a specific skill description.
+INSERT INTO STAT_DEFINITION (ID, SKILL_ID, NAME, DESCRIPTION, UNIT, TOKEN_POSITION) VALUES
+('turbo-volt-slashes', @skill1_id, 'Slash count', null, 'number', 1),
+('turbo-volt-damage', @skill1_id, 'Damage multiplier', null, 'percentage', 2),
+('thunderbolt-damage', @skill2_id, 'Electric damage multiplier', null, 'percentage', 1),
+('thunderbolt-stun-time', @skill2_id, 'Stun duration', 'How long the target remains stunned.', 'seconds', 2),
+('fork-lightning-damage', @skill3_id, 'Electric damage multiplier', null, 'percentage', 1),
+('fork-lightning-crit-chance', @skill3_id, 'Crit chance', null, 'percentage', 2);
 
--- Skill stats for Fork Lightning (levels 1-2)
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 1, 1, 180);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 1, 2, 15);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 2, 1, 220);
-INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@skill3_id, 2, 2, 20);
+INSERT INTO STAT_VALUE (ID, STAT_ID, LEVEL, AMOUNT) VALUES
+('1', 'turbo-volt-slashes', 1, 4),
+('2', 'turbo-volt-damage', 1, 150),
+('3', 'turbo-volt-slashes', 2, 4),
+('4', 'turbo-volt-damage', 2, 175),
+('5', 'turbo-volt-slashes', 3, 4),
+('6', 'turbo-volt-damage', 3, 200),
+('7', 'thunderbolt-damage', 1, 120),
+('8', 'thunderbolt-stun-time', 1, 2),
+('9', 'thunderbolt-damage', 2, 140),
+('10', 'thunderbolt-stun-time', 2, 2.5),
+('11', 'thunderbolt-damage', 3, 160),
+('12', 'thunderbolt-stun-time', 3, 3),
+('13', 'fork-lightning-damage', 1, 180),
+('14', 'fork-lightning-crit-chance', 1, 15),
+('15', 'fork-lightning-damage', 2, 220),
+('16', 'fork-lightning-crit-chance', 2, 20);
 
 -------------
 -- WENGINES --
@@ -195,11 +211,50 @@ INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
 INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
 ('11', '11', 'Luckyboo', 'A', 'Sons of Calydon', 1.2);
 
--- Illustrative Bangboo stats; only these levels are seeded.
-INSERT INTO BANGBOO_STAT (ID, BANGBOO_ID, LEVEL, HP, ATK, DEF, CRIT_RATE, CRIT_DAMAGE, IMPACT) VALUES
-('amillion-1', '1', 1, 100, 25, 15, 5, 50, 30),
-('amillion-2', '1', 2, 108, 27, 17, 5, 50, 30),
-('amillion-3', '1', 3, 116, 29, 18, 5, 50, 30);
+-- Illustrative Bangboo data for Amillion; other Bangboos have no seeded progression.
+SET @amillion_id = (SELECT ID FROM BANGBOO WHERE NAME = 'Amillion');
+
+INSERT INTO STAT_DEFINITION (ID, BANGBOO_ID, NAME, ABBR, UNIT) VALUES
+('amillion-atk', @amillion_id, 'Attack', 'ATK', 'number'),
+('amillion-def', @amillion_id, 'Defense', 'DEF', 'number'),
+('amillion-hp', @amillion_id, 'Health', 'HP', 'number'),
+('amillion-crit-rate', @amillion_id, 'Crit Rate', 'CRIT_RATE', 'percentage'),
+('amillion-crit-dmg', @amillion_id, 'Crit Damage', 'CRIT_DMG', 'percentage'),
+('amillion-impact', @amillion_id, 'Impact', 'IMPACT', 'number');
+
+INSERT INTO STAT_VALUE (ID, STAT_ID, LEVEL, AMOUNT) VALUES
+('amillion-1', 'amillion-atk', 1, 25),
+('amillion-2', 'amillion-atk', 2, 27),
+('amillion-3', 'amillion-atk', 3, 29);
+INSERT INTO STAT_VALUE (STAT_ID, LEVEL, AMOUNT) VALUES
+('amillion-def', 1, 15), ('amillion-def', 2, 17), ('amillion-def', 3, 18),
+('amillion-hp', 1, 100), ('amillion-hp', 2, 108), ('amillion-hp', 3, 116),
+('amillion-crit-rate', 1, 5), ('amillion-crit-rate', 2, 5), ('amillion-crit-rate', 3, 5),
+('amillion-crit-dmg', 1, 50), ('amillion-crit-dmg', 2, 50), ('amillion-crit-dmg', 3, 50),
+('amillion-impact', 1, 30), ('amillion-impact', 2, 30), ('amillion-impact', 3, 30);
+
+INSERT INTO SKILL (TYPE, NAME, DESCRIPTION) VALUES
+('active', 'Pocket Barrage', 'Fires a burst for {1}% Physical DMG across {2} hits.'),
+('additional', 'Hare Support', 'Increases the damage of Pocket Barrage by {1}% when the condition is met.'),
+('chain', 'Covering Fire', 'Deals {1}% Physical DMG with a Chain Attack.');
+
+SET @amillion_active = (SELECT ID FROM SKILL WHERE NAME = 'Pocket Barrage');
+SET @amillion_additional = (SELECT ID FROM SKILL WHERE NAME = 'Hare Support');
+SET @amillion_chain = (SELECT ID FROM SKILL WHERE NAME = 'Covering Fire');
+INSERT INTO BANGBOO_SKILL (BANGBOO_ID, SKILL_ID) VALUES
+(@amillion_id, @amillion_active), (@amillion_id, @amillion_additional), (@amillion_id, @amillion_chain);
+
+INSERT INTO STAT_DEFINITION (ID, SKILL_ID, NAME, UNIT, TOKEN_POSITION) VALUES
+('pocket-barrage-damage', @amillion_active, 'Physical damage multiplier', 'percentage', 1),
+('pocket-barrage-hits', @amillion_active, 'Hit count', 'number', 2),
+('hare-support-bonus', @amillion_additional, 'Damage bonus', 'percentage', 1),
+('covering-fire-damage', @amillion_chain, 'Physical damage multiplier', 'percentage', 1);
+
+INSERT INTO STAT_VALUE (STAT_ID, LEVEL, AMOUNT) VALUES
+('pocket-barrage-damage', 1, 80), ('pocket-barrage-damage', 2, 90), ('pocket-barrage-damage', 3, 100),
+('pocket-barrage-hits', 1, 3), ('pocket-barrage-hits', 2, 3), ('pocket-barrage-hits', 3, 3),
+('hare-support-bonus', 1, 10), ('hare-support-bonus', 2, 12.5),
+('covering-fire-damage', 1, 120), ('covering-fire-damage', 2, 140), ('covering-fire-damage', 3, 160);
 
 -- Sample Drive Disc catalog. Values are illustrative, not a full progression dataset.
 INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES

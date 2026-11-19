@@ -7,6 +7,7 @@ This document describes the REST API endpoints for the Bangboo entity, implement
 ### Base URLs
 - `/bangboos` - Full path
 - `/b` - Short path alias
+- `/bangboo` - Singular path alias
 
 ### Available Operations
 
@@ -35,6 +36,13 @@ Returns a HATEOAS collection of all bangboos with self-links.
           },
           "stats": {
             "href": "http://localhost:8081/bangboos/1/stats"
+          },
+          "baseStats": {
+            "href": "http://localhost:8081/bangboos/1/stats/base",
+            "type": "application/json"
+          },
+          "allSkills": {
+            "href": "http://localhost:8081/bangboos/1/skills"
           }
         }
       }
@@ -92,14 +100,14 @@ GET /bangboos/version/{from}/{to}
 ```
 Example: `/bangboos/version/1.0/1.2`
 
-#### 9. List Recorded Level Stats
+#### 9. List Complete Level Stats (Legacy format)
 ```
 GET /bangboos/{id}/stats
 ```
-Returns the recorded levels in ascending order, or `[]` if the Bangboo exists
-but has no stats. The `id` in these paths is the database ID.
+Returns levels with all six legacy base stats in ascending order, or `[]` if the
+Bangboo exists but has no complete levels. The `id` in these paths is the database ID.
 
-#### 10. Get Stats at a Level
+#### 10. Get Stats at a Level (Legacy format)
 ```
 GET /bangboos/{id}/stats/{level}
 Accept: application/hal+json
@@ -107,7 +115,15 @@ Accept: application/hal+json
 `level` must be an integer from 1 to 60. The response includes `self` and
 `allStats` links and links to adjacent levels (`prev` and `next`) only when
 those levels are recorded. A missing Bangboo or a missing eligible level returns
-`404`. The bundled sample contains stats for Amillion at levels 1–3 only.
+`404`. The bundled sample contains base stats for Amillion at levels 1–3 only.
+
+### Atomic stats and skills
+
+Use `/bangboos/{id}/stats/{statType}` for all recorded levels, or append `/{level}`
+for a single level. Use `/bangboos/{id}/skills` to discover skills and
+`/bangboos/{id}/skills/{skillId}/stats` (optionally followed by `/{level}`) for that
+skill's values. You can add `?statId={statId}` to narrow any atomic stat response.
+See [the shared route and response reference](README.md#atomic-stats-and-skills).
 
 ## Data Model
 
@@ -157,7 +173,9 @@ The API follows standard HTTP status codes:
 
 All individual bangboo responses include HATEOAS `_links` with:
 - `self` - Link to the specific bangboo resource
-- `stats` - Link to the recorded stats for that bangboo
+- `stats` - Link to the legacy list of complete base-stat rows by level
+- `baseStats` - Link to the atomic base stats and their recorded values
+- `allSkills` - Link to the description-only skill list
 
 HAL collection responses include:
 - `self` - Link to the collection endpoint
@@ -166,7 +184,8 @@ HAL collection responses include:
 
 `BangbooControllerIntegrationTest` and `BangbooControllerStatIntegrationTest`
 exercise the routes against H2 with MockMvc. `BangbooStatRepositoryUnitTest`
-checks level ordering, lookups, and the unique Bangboo/level constraint.
+checks level ordering, lookups, and the unique stat/level constraint.
+`ProgressionIntegrationTest` covers the atomic endpoints for both resource types.
 
 ## Architecture
 

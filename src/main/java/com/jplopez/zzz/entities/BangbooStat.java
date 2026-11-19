@@ -1,5 +1,6 @@
 package com.jplopez.zzz.entities;
 
+import org.hibernate.annotations.Immutable;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,13 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -21,19 +18,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-/**
- * BangbooStat Entity.
- * 
- * Stores the stats of a bangboo for each level (1 to 60).
- * Each entry represents the stats for a specific bangboo at a specific level.
- * 
- * @since 1.0
- */
+/** Legacy read-only projection of a Bangboo's six base stats at one level. */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "bangboo_id", "level" }))
+@Immutable
 public class BangbooStat extends RepresentationModel<BangbooStat> {
 
   public BangbooStat(String bangbooId, int level, float hp, float atk, float def, float critRate, float critDamage, float impact) {
@@ -48,7 +38,6 @@ public class BangbooStat extends RepresentationModel<BangbooStat> {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
   @EqualsAndHashCode.Exclude
   private String id;
 

@@ -1,6 +1,7 @@
 package com.jplopez.zzz.entities;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Relation(collectionRelation = "skillList")
 public class Skill extends RepresentationModel<Skill> {
 
   @Id
