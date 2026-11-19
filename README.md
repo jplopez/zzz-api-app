@@ -23,26 +23,106 @@ The Meta can make new and casual players feel 'left out' because they don't have
 
 1. RESTFul API
 2. Read-only catalogs:
-    1. Agents and their skills, with level stats where recorded.
+    1. Agents and their skills, with named base and skill stats by level.
     2. W-Engines with base attack, skill descriptions, and any recorded sub-stat.
     3. Drive Discs and their sets, including 2-piece and 4-piece bonuses.
-    4. Bangboos and their recorded level stats.
+    4. Bangboos and their skills, with the same stat progression API.
 
 # REST API Documentation
 
 This is a read-only API. Catalog collections and nested HAL collections use
 `Accept: application/hal+json`; filter endpoints and the Bangboo stats list return JSON arrays.
 Request HAL on detail endpoints to receive `_links`. Links point to canonical paths even
-when a short alias is used. For W-Engines, Bangboos, and Discs, `{id}` refers to the
-resource's `id` field, not its game/catalog identifier.
+when a short alias is used. `{id}` refers to the resource's database `id` field,
+not its game/catalog identifier.
 
-A missing resource returns `404 Not Found`. A search without matches returns `200 OK`
-with `[]`. Invalid enum or numeric parameters, out-of-bounds levels or positions, and
-reversed ranges on the W-Engine, Bangboo, and Disc APIs return `400 Bad Request`.
+A missing resource returns `404 Not Found`. A catalog filter without matches returns
+`200 OK` with `[]`. Invalid enum or numeric parameters, out-of-bounds levels or
+positions, and reversed ranges on the W-Engine, Bangboo, and Disc APIs return
+`400 Bad Request`.
+
+## Atomic stats and skills
+
+These routes work with `/agents/{id}` and `/bangboos/{id}`. Substitute that prefix
+for `{character}` below. The aliases `/a`, `/agent`, `/b`, and `/bangboo` also work.
+
+| GET path | Returns |
+| --- | --- |
+| `{character}/stats/{statType}/{level}` | Stat definitions of that type with only the requested level's value. |
+| `{character}/stats/{statType}` | Stat definitions of that type with all recorded levels. Add `?statId={statId}` for one stat. |
+| `{character}/skills` | A HAL collection (`_embedded.skillList`) of skill IDs, types, names, and descriptions. No scaling values. |
+| `{character}/skills/{skillId}/stats/{level}` | Only the selected skill's named stats and values at that level. |
+| `{character}/skills/{skillId}/stats` | The selected skill's named stats and all their recorded levels. |
+
+- `statType` is case-insensitive. Agents support `base`, `basic`, `dodge`, `assist`,
+  `ultimate`, `chain`, `special`, `ex`, `dash`, and `counter`. Bangboos support
+  `base`, `active`, `additional`, and `chain`. A non-base type can include stats
+  from multiple skills; use the skill-specific route to select one skill.
+- `level` is the owning Agent or Bangboo's level, an integer from 1 to 60.
+  Omitting it returns all **recorded** levels in ascending order. The API does
+  not interpolate or extrapolate values.
+- `statId` is an optional, case-sensitive identifier from the response's `stats[].id`.
+  It also works on the one-level and skill-stat routes. `skillId` comes from the
+  skill listing. Both IDs must belong to the requested scope.
+- A known character without skills returns a HAL collection with a `self` link
+  and no `_embedded` section.
+- Stat endpoints return `application/json` with a `stats` array. A known scope with
+  no definitions returns `{"stats":[]}`. A known stat with no value at the requested
+  level has `"values":[]`. A missing character, unowned skill, or unknown/out-of-scope
+  `statId` returns `404`; invalid types, levels, or blank `statId` return `400`.
+- `unit` is `number` (flat amounts and counts), `percentage` (a value of `10`
+  means **10%**, not `0.10`), or `seconds` (durations). `abbr` and `description`
+  are omitted when not recorded. A skill stat includes `skillId` and, if tied
+  to a `{n}` placeholder in the skill description, a one-based `tokenPosition`.
+
+Example: `GET /agent/1/stats/base/1?statId=anby-atk`
+
+```json
+{
+  "stats": [
+    {
+      "id": "anby-atk",
+      "type": "base",
+      "name": "Attack",
+      "abbr": "ATK",
+      "unit": "number",
+      "values": [{ "level": 1, "value": 10 }]
+    }
+  ]
+}
+```
+
+Example: `GET /bangboos/1/skills/11/stats/2?statId=pocket-barrage-damage`
+
+```json
+{
+  "stats": [
+    {
+      "id": "pocket-barrage-damage",
+      "type": "active",
+      "name": "Physical damage multiplier",
+      "unit": "percentage",
+      "skillId": "11",
+      "tokenPosition": 1,
+      "values": [{ "level": 2, "value": 90 }]
+    }
+  ]
+}
+```
+
+The catalog includes illustrative progression for Anby and Amillion, not a full
+level dataset. The older Agent skill and Bangboo level-stat routes below keep
+returning their original shapes.
+
+**Storage:** `STAT_DEFINITION` holds a stat's metadata and references exactly one
+Agent, Bangboo, or skill. `STAT_VALUE` holds one numeric value per stat and level.
+`AGENT_SKILL` and `BANGBOO_SKILL` determine which characters own each skill.
+`SKILL_STAT` and `BANGBOO_STAT` are read-only views over the same data for the
+legacy formats.
 
 ## Agents API
 
-Base URLs: `/agents` or `/a`
+Base URLs: `/agents`, `/a`, or `/agent`
 
 ### Get All Agents
 **URL:** `GET /agents`  
@@ -135,7 +215,7 @@ Base URLs: `/agents` or `/a`
 **URL:** `GET /agents/{agentId}/skills`  
 **Accept:** `application/hal+json`  
 **Parameters:** `agentId` (string) - Agent ID  
-**Description:** Returns all skills for a specific agent with HATEOAS links to individual skill details.
+**Description:** Returns skill descriptions without scaling values. The `stats` link points to the atomic skill-stat endpoint.
 
 **Example Response:**
 ```json
@@ -143,16 +223,19 @@ Base URLs: `/agents` or `/a`
   "_embedded": {
     "skillList": [
       {
-        "id": "skill1",
-        "type": "Basic",
-        "name": "Voltage Spike",
-        "description": "Basic attack skill",
+        "id": "1",
+        "type": "basic",
+        "name": "Turbo Volt",
+        "description": "Unleashes up to {1} slashes dealing {2}% damage",
         "_links": {
           "self": {
-            "href": "http://localhost:8081/agents/1/skills/skill1"
+            "href": "http://localhost:8081/agents/1/skill/1"
           },
           "skillStats": {
-            "href": "http://localhost:8081/agents/1/skills/skill1"
+            "href": "http://localhost:8081/agents/1/skills/1"
+          },
+          "stats": {
+            "href": "http://localhost:8081/agents/1/skills/1/stats"
           }
         }
       }
@@ -166,7 +249,7 @@ Base URLs: `/agents` or `/a`
 }
 ```
 
-### Get Agent Skill with Stats
+### Get Agent Skill with Stats (Legacy format)
 **URL:** `GET /agents/{agentId}/skills/{skillId}`  
 **Parameters:** `agentId` (string) - Agent ID, `skillId` (string) - Skill ID  
 **Description:** Returns a specific skill with all its stat progression data across levels.
@@ -197,7 +280,7 @@ Base URLs: `/agents` or `/a`
 }
 ```
 
-### Get Agent Skill Stats by Level
+### Get Agent Skill Stats by Level (Legacy format)
 **URL:** `GET /agents/{agentId}/skills/{skillId}/level/{level}`  
 **Parameters:** `agentId` (string) - Agent ID, `skillId` (string) - Skill ID, `level` (int) - Skill level  
 **Description:** Returns skill data with stats for a specific level only.
@@ -211,7 +294,7 @@ Base URLs: `/agents` or `/a`
 
 ## Bangboos API
 
-Base URLs: `/bangboos` or `/b`
+Base URLs: `/bangboos`, `/b`, or `/bangboo`
 
 ### Get All Bangboos
 **URL:** `GET /bangboos`  
@@ -284,10 +367,16 @@ Base URLs: `/bangboos` or `/b`
 **Parameters:** `from` (float), `to` (float) - Version range  
 **Description:** Returns bangboos released between the specified versions (inclusive).
 
-### Get Bangboo Stats
+### Get Bangboo Skills
+
+- **URL:** `GET /bangboos/{id}/skills` or `GET /bangboos/{id}/skills/{skillId}`
+- **Accept:** `application/hal+json`
+- **Description:** Lists skill descriptions or returns one skill's description. Follow the `stats` link or use the [atomic routes](#atomic-stats-and-skills) for scaling values.
+
+### Get Bangboo Stats (Legacy format)
 **URL:** `GET /bangboos/{id}/stats`  
 **Parameters:** `id` (string) - Bangboo ID  
-**Description:** Returns the recorded stats for a specific Bangboo, ordered by level ascending. Returns `[]` if the Bangboo exists but has no recorded stats.
+**Description:** Returns levels at which all six legacy base stats are recorded, ordered by level. Returns `[]` if the Bangboo exists but no level has a complete row.
 
 **Example Response:**
 ```json
@@ -309,12 +398,12 @@ Base URLs: `/bangboos` or `/b`
 ]
 ```
 
-### Get Bangboo Stats by Level
+### Get Bangboo Stats by Level (Legacy format)
 **URL:** `GET /bangboos/{id}/stats/{level}`  
 **Parameters:** `id` (string) - Bangboo ID, `level` (int) - Level (1-60)  
 **Description:** Returns the stats for one level with `self` and `allStats` links. `prev` and `next` are included only when the immediately adjacent level is recorded.
 
-**Caveats:** Supported levels are 1–60, but the bundled sample data contains only levels 1–3 for Amillion. A valid level without a recorded row returns `404`.
+**Caveats:** Supported levels are 1–60, but the bundled sample data contains only levels 1–3 for Amillion. A level without a complete legacy row returns `404`. The atomic routes can also return partial levels.
 
 ## W-Engines API
 

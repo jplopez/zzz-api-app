@@ -1,20 +1,21 @@
 package com.jplopez.zzz.entities;
 
+import org.hibernate.annotations.Immutable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Legacy read-only projection of skill description token values. */
 @Data
 @NoArgsConstructor
 @Entity
+@Immutable
 public class SkillStat {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
   private String id;
 
   @Column(nullable = false)
