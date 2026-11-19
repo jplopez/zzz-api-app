@@ -1,38 +1,36 @@
 package com.jplopez.zzz;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.Environment;
+import org.springframework.context.ApplicationContext;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
-import com.jplopez.zzz.controllers.ZZZController;
+import com.jplopez.zzz.controllers.AgentsController;
+import com.jplopez.zzz.controllers.BangbooController;
+import com.jplopez.zzz.controllers.DiscDriveController;
+import com.jplopez.zzz.controllers.DiscDriveSetController;
+import com.jplopez.zzz.controllers.WEngineController;
 
-/**
- * @since 1.0
- */
 @SpringBootTest(classes = ZzzApiAppApplication.class)
 class ZzzApiAppApplicationTests {
 
-	@Autowired
-	Environment env;
+  @Autowired
+  private ApplicationContext context;
 
-	@Autowired
-	ZZZController controller;
+  @Value("${server.port}")
+  private int serverPort;
 
-
-	@Value("${server.port}")
-	int serverPort;
-
-	@Test
-	void contextLoads() {
-		assertEquals(8081, serverPort);
-		assertNotNull(controller);
-		//tests the Spring Boot context load
-	}
-
+  @Test
+  void contextLoads() {
+    assertThat(serverPort).isEqualTo(8081);
+    assertThat(context.getBeanNamesForType(AgentsController.class)).hasSize(1);
+    assertThat(context.getBeanNamesForType(WEngineController.class)).hasSize(1);
+    assertThat(context.getBeanNamesForType(BangbooController.class)).hasSize(1);
+    assertThat(context.getBeanNamesForType(DiscDriveController.class)).hasSize(1);
+    assertThat(context.getBeanNamesForType(DiscDriveSetController.class)).hasSize(1);
+  }
 }

@@ -1,6 +1,7 @@
 package com.jplopez.zzz.entities;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import com.jplopez.zzz.entities.converter.RarityConverter;
 import com.jplopez.zzz.entities.enums.Rarity;
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Relation(collectionRelation = "bangbooList")
 public class Bangboo extends RepresentationModel<Bangboo> {
 
   public Bangboo(String id, String bangbooId, String name) {
@@ -42,7 +44,7 @@ public class Bangboo extends RepresentationModel<Bangboo> {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   @EqualsAndHashCode.Exclude
   private String id;
 

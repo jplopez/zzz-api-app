@@ -31,7 +31,10 @@ Returns a HATEOAS collection of all bangboos with self-links.
         "version": 1.0,
         "_links": {
           "self": {
-            "href": "http://localhost:8080/bangboos/1"
+            "href": "http://localhost:8081/bangboos/1"
+          },
+          "stats": {
+            "href": "http://localhost:8081/bangboos/1/stats"
           }
         }
       }
@@ -39,7 +42,7 @@ Returns a HATEOAS collection of all bangboos with self-links.
   },
   "_links": {
     "self": {
-      "href": "http://localhost:8080/bangboos"
+      "href": "http://localhost:8081/bangboos"
     }
   }
 }
@@ -89,6 +92,23 @@ GET /bangboos/version/{from}/{to}
 ```
 Example: `/bangboos/version/1.0/1.2`
 
+#### 9. List Recorded Level Stats
+```
+GET /bangboos/{id}/stats
+```
+Returns the recorded levels in ascending order, or `[]` if the Bangboo exists
+but has no stats. The `id` in these paths is the database ID.
+
+#### 10. Get Stats at a Level
+```
+GET /bangboos/{id}/stats/{level}
+Accept: application/hal+json
+```
+`level` must be an integer from 1 to 60. The response includes `self` and
+`allStats` links and links to adjacent levels (`prev` and `next`) only when
+those levels are recorded. A missing Bangboo or a missing eligible level returns
+`404`. The bundled sample contains stats for Amillion at levels 1–3 only.
+
 ## Data Model
 
 ### Bangboo Entity Properties
@@ -137,26 +157,16 @@ The API follows standard HTTP status codes:
 
 All individual bangboo responses include HATEOAS `_links` with:
 - `self` - Link to the specific bangboo resource
+- `stats` - Link to the recorded stats for that bangboo
 
-Collection responses include:
+HAL collection responses include:
 - `self` - Link to the collection endpoint
 
 ## Testing
 
-The implementation includes comprehensive test coverage:
-
-### Unit Tests (`BangbooRepositoryUnitTest`)
-- All find methods testing
-- Nullable column edge cases
-- Constraint validation
-- Enum value handling
-- Version comparison methods
-
-### Integration Tests (`BangbooControllerIntegrationTest`)
-- HTTP endpoint testing
-- HATEOAS response validation
-- JSON serialization testing
-- Error handling verification
+`BangbooControllerIntegrationTest` and `BangbooControllerStatIntegrationTest`
+exercise the routes against H2 with MockMvc. `BangbooStatRepositoryUnitTest`
+checks level ordering, lookups, and the unique Bangboo/level constraint.
 
 ## Architecture
 
@@ -166,6 +176,5 @@ The Bangboo API follows the established ZZZ application patterns:
 - **Repository**: `BangbooRepository` extends `JpaRepository` with custom find methods
 - **Controller**: `BangbooController` extends `ZZZController` with HATEOAS link generation
 - **Tests**: Comprehensive unit and integration tests following existing patterns
-- **Mock**: `BangbooMock` provides test data generation utilities
 
-All components are fully documented with JavaDoc and follow the naming conventions established by the Agent and WEngine implementations.
+See the [README](README.md#bangboos-api) for additional response examples.

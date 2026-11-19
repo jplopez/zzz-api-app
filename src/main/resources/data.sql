@@ -3,66 +3,66 @@
 ------------
 
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('anby', 'Anby Demara','A','electric','stun','slash','Cunning Hares', 1.0);
+('anby', 'Anby Demara','A','ELECTRIC','STUN','SLASH','Cunning Hares', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('billy', 'Billy Kid','A','physical','attack','pierce','Cunning Hares', 1.0);
+('billy', 'Billy Kid','A','PHYSICAL','ATTACK','PIERCE','Cunning Hares', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('nekomata', 'Nekomata Mana','S','physical','attack','slash','Cunning Hares', 1.0);
+('nekomata', 'Nekomata Mana','S','PHYSICAL','ATTACK','SLASH','Cunning Hares', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('nicole', 'Nicole Demara','A','ether','support','strike','Cunning Hares', 1.0);
+('nicole', 'Nicole Demara','A','ETHER','SUPPORT','STRIKE','Cunning Hares', 1.0);
 
 
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('anton', 'Anton','A','electric','attack','pierce','Belobog Heavy Industries', 1.0);
+('anton', 'Anton','A','ELECTRIC','ATTACK','PIERCE','Belobog Heavy Industries', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('ben', 'Ben Bigger','A','fire','shield','strike','Belobog Heavy Industries', 1.0);
+('ben', 'Ben Bigger','A','FIRE','SHIELD','STRIKE','Belobog Heavy Industries', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('grace', 'Grace Howard','S','electric','anomaly','pierce','Belobog Heavy Industries', 1.0);
+('grace', 'Grace Howard','S','ELECTRIC','ANOMALY','PIERCE','Belobog Heavy Industries', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('koleda', 'Koleda Belobog','S','fire','stun','strike','Belobog Heavy Industries', 1.0);
+('koleda', 'Koleda Belobog','S','FIRE','STUN','STRIKE','Belobog Heavy Industries', 1.0);
 
 
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('rina', 'Alexandrina Sebastiane','S','electric','support','strike','Victoria Housekeeping', 1.0);
+('rina', 'Alexandrina Sebastiane','S','ELECTRIC','SUPPORT','STRIKE','Victoria Housekeeping', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('corin', 'Corin Wickes','A','physical','attack','slash','Victoria Housekeeping', 1.0);
+('corin', 'Corin Wickes','A','PHYSICAL','ATTACK','SLASH','Victoria Housekeeping', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('ellen', 'Ellen Joe','S','ICE','attack','slash','Victoria Housekeeping', 1.0);
+('ellen', 'Ellen Joe','S','ICE','ATTACK','SLASH','Victoria Housekeeping', 1.0);
 INSERT INTO agent (NAME, FULL_NAME, RARITY, ATTRIBUTE, SPECIALITY, TYPE, FACTION, VERSION) values
-('lycaon', 'Von Lycaon','S','ICE','stun','strike','Victoria Housekeeping', 1.0);
-
-
-INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('soldier11', 'Soldier 11','S','fire','attack','slash','Obol Squad', 1.0);
-
-INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('soukaku', 'Soukaku','A','ICE','support','slash','Hollow Special Operations Section 6', 1.0);
+('lycaon', 'Von Lycaon','S','ICE','STUN','STRIKE','Victoria Housekeeping', 1.0);
 
 
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('janedoe', 'Jaen Doe','S','physical','anomaly','slash','Criminal Investigation Special Response Team', 1.1);
+('soldier11', 'Soldier 11','S','FIRE','ATTACK','SLASH','Obol Squad', 1.0);
+
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('zhuyuan', 'Zhu Yuan','S','ether','attack','pierce','Criminal Investigation Special Response Team', 1.0);
-INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('qingyi', 'Qingyi','S','electric','stun','strike','Criminal Investigation Special Response Team', 1.1);
-INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('seth', 'Seth Lowell','A','electric','shield','slash','Criminal Investigation Special Response Team', 1.1);
+('soukaku', 'Soukaku','A','ICE','SUPPORT','SLASH','Hollow Special Operations Section 6', 1.0);
 
 
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('lucy', 'Luciana de Montefio','A','fire','support','strike','Sons of Calydon', 1.0);
+('janedoe', 'Jaen Doe','S','PHYSICAL','ANOMALY','SLASH','Criminal Investigation Special Response Team', 1.1);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('piper', 'Piper Wheel','A','physical','anomaly','slash','Sons of Calydon', 1.0);
+('zhuyuan', 'Zhu Yuan','S','ETHER','ATTACK','PIERCE','Criminal Investigation Special Response Team', 1.0);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('caesar', 'Caesar King','S','physical','anomaly','strike','Sons of Calydon', 1.2);
+('qingyi', 'Qingyi','S','ELECTRIC','STUN','STRIKE','Criminal Investigation Special Response Team', 1.1);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
-('burnice', 'BurnICE White','S','fire','anomaly','pierce','Sons of Calydon', 1.2);
+('seth', 'Seth Lowell','A','ELECTRIC','SHIELD','SLASH','Criminal Investigation Special Response Team', 1.1);
+
+
+INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
+('lucy', 'Luciana de Montefio','A','FIRE','SUPPORT','STRIKE','Sons of Calydon', 1.0);
+INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
+('piper', 'Piper Wheel','A','PHYSICAL','ANOMALY','SLASH','Sons of Calydon', 1.0);
+INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
+('caesar', 'Caesar King','S','PHYSICAL','ANOMALY','STRIKE','Sons of Calydon', 1.2);
+INSERT INTO agent (name, full_name, rarity, attribute, speciality, type, faction, version) values
+('burnice', 'BurnICE White','S','FIRE','ANOMALY','PIERCE','Sons of Calydon', 1.2);
 
 
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, version) values
-('lighter', 'Lighter','S','fire','stun' ,'Sons of Calydon', 1.3);
+('lighter', 'Lighter','S','FIRE','STUN' ,'Sons of Calydon', 1.3);
 INSERT INTO agent (name, full_name, rarity, attribute, speciality, faction, version) values
-('yanagi', 'Tsukishiro Yanagi','S','electric','anomaly','Hollow Special Operations Section 6', 1.3);
+('yanagi', 'Tsukishiro Yanagi','S','ELECTRIC','ANOMALY','Hollow Special Operations Section 6', 1.3);
 
 
 ------------
@@ -139,16 +139,16 @@ INSERT INTO SKILL_STAT (SKILL_ID, LEVEL, TOKEN_POSITION, TOKEN_VALUE) VALUES (@s
 -- WENGINES --
 -------------
 
-INSERT INTO WENGINE (WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
-('1', 'Street Superstar', 'A versatile W-Engine that boosts attack damage and skill performance.', 'S', 594, 'ATTACK');
-INSERT INTO WENGINE (WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
-('2', 'Cannon Roamer', 'A W-Engine designed for Anomaly agents, enhancing their anomaly buildup capabilities.', 'S', 624, 'ANOMALY');
-INSERT INTO WENGINE (WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
-('3', 'Steam Oven', 'A support-oriented W-Engine that enhances team capabilities.', 'A', 463, 'SUPPORT');
-INSERT INTO WENGINE (WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
-('4', 'Demara Battery Mark II', 'An enhanced version of the original Demara Battery, providing increased energy efficiency.', 'A', 476, 'STUN');
-INSERT INTO WENGINE (WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
-('5', 'Rainforest Gourmet', 'A unique W-Engine designed for support agents with healing capabilities.', 'S', 624, 'SUPPORT');
+INSERT INTO WENGINE (ID, WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
+('1', '1', 'Street Superstar', 'A versatile W-Engine that boosts attack damage and skill performance.', 'S', 594, 'ATTACK');
+INSERT INTO WENGINE (ID, WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
+('2', '2', 'Cannon Roamer', 'A W-Engine designed for Anomaly agents, enhancing their anomaly buildup capabilities.', 'S', 624, 'ANOMALY');
+INSERT INTO WENGINE (ID, WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
+('3', '3', 'Steam Oven', 'A support-oriented W-Engine that enhances team capabilities.', 'A', 463, 'SUPPORT');
+INSERT INTO WENGINE (ID, WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
+('4', '4', 'Demara Battery Mark II', 'An enhanced version of the original Demara Battery, providing increased energy efficiency.', 'A', 476, 'STUN');
+INSERT INTO WENGINE (ID, WENGINE_ID, NAME, DESCRIPTION, RARITY, BASE_ATTACK, SPECIALTY) VALUES
+('5', '5', 'Rainforest Gourmet', 'A unique W-Engine designed for support agents with healing capabilities.', 'S', 624, 'SUPPORT');
 
 SET @wengine_id = (SELECT ID FROM WENGINE WHERE NAME = 'Street Superstar');
 INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES 
@@ -172,25 +172,47 @@ INSERT INTO WENGINE_SKILL_DESCRIPTIONS (WENGINE_ID, SKILL_DESCRIPTIONS) VALUES
 -- BANGBOOS --
 --------------
 
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('1', 'Amillion', 'S', 'Victoria Housekeeping', 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('2', 'Butler', 'A', 'Victoria Housekeeping', 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('3', 'Pengboo', 'A', 'Belobog Heavy Industries', 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('4', 'Bagboo', 'A', 'Cunning Hares', 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('5', 'Electroboo', 'B', null, 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('6', 'Magnetiboo', 'B', null, 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('7', 'Rocketboo', 'B', null, 1.0);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('8', 'Boollseye', 'S', 'Criminal Investigation Special Response Team', 1.1);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('9', 'Officer Cui', 'A', 'Criminal Investigation Special Response Team', 1.1);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('10', 'Crybaby', 'S', 'Sons of Calydon', 1.2);
-INSERT INTO BANGBOO (BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
-('11', 'Luckyboo', 'A', 'Sons of Calydon', 1.2);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('1', '1', 'Amillion', 'S', 'Victoria Housekeeping', 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('2', '2', 'Butler', 'A', 'Victoria Housekeeping', 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('3', '3', 'Pengboo', 'A', 'Belobog Heavy Industries', 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('4', '4', 'Bagboo', 'A', 'Cunning Hares', 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('5', '5', 'Electroboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('6', '6', 'Magnetiboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('7', '7', 'Rocketboo', 'B', null, 1.0);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('8', '8', 'Boollseye', 'S', 'Criminal Investigation Special Response Team', 1.1);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('9', '9', 'Officer Cui', 'A', 'Criminal Investigation Special Response Team', 1.1);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('10', '10', 'Crybaby', 'S', 'Sons of Calydon', 1.2);
+INSERT INTO BANGBOO (ID, BANGBOO_ID, NAME, RARITY, FACTION, VERSION) VALUES
+('11', '11', 'Luckyboo', 'A', 'Sons of Calydon', 1.2);
+
+-- Illustrative Bangboo stats; only these levels are seeded.
+INSERT INTO BANGBOO_STAT (ID, BANGBOO_ID, LEVEL, HP, ATK, DEF, CRIT_RATE, CRIT_DAMAGE, IMPACT) VALUES
+('amillion-1', '1', 1, 100, 25, 15, 5, 50, 30),
+('amillion-2', '1', 2, 108, 27, 17, 5, 50, 30),
+('amillion-3', '1', 3, 116, 29, 18, 5, 50, 30);
+
+-- Sample Drive Disc catalog. Values are illustrative, not a full progression dataset.
+INSERT INTO DISC_DRIVE_SET (ID, DISC_DRIVE_SET_ID, NAME, DESCRIPTION, TWO_PIECE_SKILL_DESCRIPTION, FOUR_PIECE_SKILL_DESCRIPTION) VALUES
+('1', 'woodpecker-electro', 'Woodpecker Electro', 'A set for critical-hit builds.',
+ 'Increases CRIT Rate by 8%.', 'Critical hits with Basic Attacks, Dodge Counters, or EX Special Attacks increase ATK.'),
+('2', 'swing-jazz', 'Swing Jazz', 'A set for energy regeneration and team support.',
+ 'Increases Energy Regen by 20%.', 'Using a Chain Attack or Ultimate increases the squad''s damage.');
+
+INSERT INTO DISC_DRIVE (ID, DISC_DRIVE_ID, POSITION, TYPE, BASE_VALUE, DISC_DRIVE_SET_ID) VALUES
+('1', 'woodpecker-electro-1', 1, 'HP', 220, '1'),
+('2', 'woodpecker-electro-2', 2, 'ATK', 35, '1'),
+('3', 'woodpecker-electro-3', 3, 'DEF', 15, '1'),
+('4', 'woodpecker-electro-4', 4, 'CRIT_RATE', 4.8, '1'),
+('5', 'woodpecker-electro-5', 5, 'ATK_PER', 7.5, '1'),
+('6', 'woodpecker-electro-6', 6, 'ANOMALY_MASTERY', 9, '1'),
+('7', 'swing-jazz-1', 1, 'HP', 220, '2');
