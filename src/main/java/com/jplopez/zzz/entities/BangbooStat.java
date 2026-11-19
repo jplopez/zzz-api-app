@@ -2,6 +2,8 @@ package com.jplopez.zzz.entities;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,11 +12,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * BangbooStat Entity.
@@ -28,6 +33,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "bangboo_id", "level" }))
 public class BangbooStat extends RepresentationModel<BangbooStat> {
 
   public BangbooStat(String bangbooId, int level, float hp, float atk, float def, float critRate, float critDamage, float impact) {
@@ -42,11 +48,11 @@ public class BangbooStat extends RepresentationModel<BangbooStat> {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.UUID)
   @EqualsAndHashCode.Exclude
   private String id;
 
-  @Column(nullable = false)
+  @Column(name = "bangboo_id", nullable = false)
   private String bangbooId;
 
   @Column(nullable = false)
@@ -60,7 +66,7 @@ public class BangbooStat extends RepresentationModel<BangbooStat> {
   @Column(nullable = false)
   private float atk;
 
-  @Column(nullable = false) 
+  @Column(nullable = false)
   private float def;
 
   @Column(nullable = false)
@@ -72,7 +78,10 @@ public class BangbooStat extends RepresentationModel<BangbooStat> {
   @Column(nullable = false)
   private float impact;
 
+  @JsonIgnore
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bangbooId", insertable = false, updatable = false)
+  @JoinColumn(name = "bangboo_id", insertable = false, updatable = false)
   private Bangboo bangboo;
 }

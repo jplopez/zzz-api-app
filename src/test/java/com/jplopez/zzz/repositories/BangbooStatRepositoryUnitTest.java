@@ -1,95 +1,57 @@
 package com.jplopez.zzz.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jplopez.zzz.app.ZzzApiAppApplication;
 import com.jplopez.zzz.entities.BangbooStat;
 import com.jplopez.zzz.mocks.BangbooStatMock;
 
-/**
- * Unit tests for BangbooStatRepository.
- * Tests all find methods including ordering by level and finding by bangboo ID and level.
- * 
- * @since 1.0
- */
 @SpringBootTest(classes = ZzzApiAppApplication.class)
+@Transactional
 class BangbooStatRepositoryUnitTest {
 
   @Autowired
   private BangbooStatRepository repository;
 
   @Test
-  void testFindByBangbooIdOrderByLevelAsc() {
-    // Create some mock stats
-    String testBangbooId = "test-bangboo-1";
-    List<BangbooStat> mockStats = BangbooStatMock.createMockStatsForBangboo(testBangbooId);
-    
-    // Save only first 5 levels for testing
-    for (int i = 0; i < 5; i++) {
-      repository.save(mockStats.get(i));
-    }
+  void findsStatsInLevelOrder() {
+    String bangbooId = "2";
+    repository.saveAllAndFlush(List.of(
+        BangbooStatMock.createMockStatForLevel(bangbooId, 5),
+        BangbooStatMock.createMockStatForLevel(bangbooId, 1),
+        BangbooStatMock.createMockStatForLevel(bangbooId, 3)));
 
-    // Find and verify ordering
-    List<BangbooStat> found = repository.findByBangbooIdOrderByLevelAsc(testBangbooId);
-    
-    assertNotNull(found);
-    assertThat(found.size(), is(5));
-    
-    // Verify levels are in ascending order
-    for (int i = 0; i < found.size(); i++) {
-      assertEquals(i + 1, found.get(i).getLevel());
-      assertEquals(testBangbooId, found.get(i).getBangbooId());
-    }
-
-    // Clean up
-    repository.deleteAll(found);
+    assertThat(repository.findByBangbooIdOrderByLevelAsc(bangbooId))
+        .extracting(BangbooStat::getLevel).containsExactly(1, 3, 5);
   }
 
   @Test
-  void testFindByBangbooIdAndLevel() {
-    // Create a single mock stat
-    String testBangbooId = "test-bangboo-2";
-    int testLevel = 25;
-    BangbooStat mockStat = BangbooStatMock.createMockStatForLevel(testBangbooId, testLevel);
-    
-    BangbooStat saved = repository.save(mockStat);
+  void findsStatByBangbooAndLevel() {
+    BangbooStat saved = repository.saveAndFlush(BangbooStatMock.createMockStatForLevel("3", 25));
 
-    // Find by bangboo ID and level
-    Optional<BangbooStat> found = repository.findByBangbooIdAndLevel(testBangbooId, testLevel);
-    
-    assertTrue(found.isPresent());
-    assertEquals(testBangbooId, found.get().getBangbooId());
-    assertEquals(testLevel, found.get().getLevel());
-    assertEquals(saved.getId(), found.get().getId());
-
-    // Clean up
-    repository.delete(saved);
+    assertThat(repository.findByBangbooIdAndLevel("3", 25))
+        .map(BangbooStat::getId).contains(saved.getId());
+    assertThat(repository.findByBangbooIdAndLevel("2", 25)).isEmpty();
   }
 
   @Test
-  void testFindByBangbooIdAndLevel_NotFound() {
-    // Try to find non-existent stat
-    Optional<BangbooStat> found = repository.findByBangbooIdAndLevel("non-existent", 1);
-    
-    assertFalse(found.isPresent());
+  void returnsEmptyResultsForUnknownBangboo() {
+    assertThat(repository.findByBangbooIdAndLevel("missing", 1)).isEmpty();
+    assertThat(repository.findByBangbooIdOrderByLevelAsc("missing")).isEmpty();
   }
 
   @Test
-  void testFindByBangbooIdOrderByLevelAsc_EmptyResult() {
-    // Try to find stats for non-existent bangboo
-    List<BangbooStat> found = repository.findByBangbooIdOrderByLevelAsc("non-existent-bangboo");
-    
-    assertNotNull(found);
-    assertTrue(found.isEmpty());
+  void rejectsDuplicateStatsForSameBangbooAndLevel() {
+    assertThatThrownBy(() -> repository.saveAndFlush(BangbooStatMock.createMockStatForLevel("1", 1)))
+        .isInstanceOf(DataIntegrityViolationException.class);
   }
 }

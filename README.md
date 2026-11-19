@@ -22,16 +22,23 @@ The Meta can make new and casual players feel 'left out' because they don't have
 # Main Features
 
 1. RESTFul API
-2. Authenticated Clients
-3. Datasets:
-    1. Agents, their stats and active and passive skills from level 1 to 60.
-    2. W-Engines with their stats from 1 to 5 starts, and level 1 to 60.
-    3. Discs with their stats from 1 to 15 (S rank), 1 to 12 (A Rank), 1 to 10 (B Rank)
-    4. Bangboos with their stats from 1 to 5 stars and level 1 to 60.
+2. Read-only catalogs:
+    1. Agents and their skills, with level stats where recorded.
+    2. W-Engines with base attack, skill descriptions, and any recorded sub-stat.
+    3. Drive Discs and their sets, including 2-piece and 4-piece bonuses.
+    4. Bangboos and their recorded level stats.
 
 # REST API Documentation
 
-This API follows HATEOAS (Hypermedia as the Engine of Application State) principles and returns JSON with `application/hal+json` content type for collection endpoints. All endpoints support both full and short path aliases.
+This is a read-only API. Catalog collections and nested HAL collections use
+`Accept: application/hal+json`; filter endpoints and the Bangboo stats list return JSON arrays.
+Request HAL on detail endpoints to receive `_links`. Links point to canonical paths even
+when a short alias is used. For W-Engines, Bangboos, and Discs, `{id}` refers to the
+resource's `id` field, not its game/catalog identifier.
+
+A missing resource returns `404 Not Found`. A search without matches returns `200 OK`
+with `[]`. Invalid enum or numeric parameters, out-of-bounds levels or positions, and
+reversed ranges on the W-Engine, Bangboo, and Disc APIs return `400 Bad Request`.
 
 ## Agents API
 
@@ -60,7 +67,7 @@ Base URLs: `/agents` or `/a`
         "faction": "Cunning Hares",
         "_links": {
           "self": {
-            "href": "http://localhost:8080/agents/1"
+            "href": "http://localhost:8081/agents/1"
           }
         }
       }
@@ -68,7 +75,7 @@ Base URLs: `/agents` or `/a`
   },
   "_links": {
     "self": {
-      "href": "http://localhost:8080/agents"
+      "href": "http://localhost:8081/agents"
     }
   }
 }
@@ -142,10 +149,10 @@ Base URLs: `/agents` or `/a`
         "description": "Basic attack skill",
         "_links": {
           "self": {
-            "href": "http://localhost:8080/agents/1/skills/skill1"
+            "href": "http://localhost:8081/agents/1/skills/skill1"
           },
           "skillStats": {
-            "href": "http://localhost:8080/agents/1/skills/skill1"
+            "href": "http://localhost:8081/agents/1/skills/skill1"
           }
         }
       }
@@ -153,7 +160,7 @@ Base URLs: `/agents` or `/a`
   },
   "_links": {
     "self": {
-      "href": "http://localhost:8080/agents/1/skills"
+      "href": "http://localhost:8081/agents/1/skills"
     }
   }
 }
@@ -184,7 +191,7 @@ Base URLs: `/agents` or `/a`
   ],
   "_links": {
     "self": {
-      "href": "http://localhost:8080/agents/1/skills/skill1"
+      "href": "http://localhost:8081/agents/1/skills/skill1"
     }
   }
 }
@@ -225,7 +232,10 @@ Base URLs: `/bangboos` or `/b`
         "version": 1.0,
         "_links": {
           "self": {
-            "href": "http://localhost:8080/bangboos/1"
+            "href": "http://localhost:8081/bangboos/1"
+          },
+          "stats": {
+            "href": "http://localhost:8081/bangboos/1/stats"
           }
         }
       }
@@ -233,7 +243,7 @@ Base URLs: `/bangboos` or `/b`
   },
   "_links": {
     "self": {
-      "href": "http://localhost:8080/bangboos"
+      "href": "http://localhost:8081/bangboos"
     }
   }
 }
@@ -277,13 +287,13 @@ Base URLs: `/bangboos` or `/b`
 ### Get Bangboo Stats
 **URL:** `GET /bangboos/{id}/stats`  
 **Parameters:** `id` (string) - Bangboo ID  
-**Description:** Returns all stat levels (1-60) for a specific bangboo, ordered by level ascending.
+**Description:** Returns the recorded stats for a specific Bangboo, ordered by level ascending. Returns `[]` if the Bangboo exists but has no recorded stats.
 
 **Example Response:**
 ```json
 [
   {
-    "id": "stat1",
+    "id": "amillion-1",
     "bangbooId": "1",
     "level": 1,
     "hp": 100.0,
@@ -292,11 +302,9 @@ Base URLs: `/bangboos` or `/b`
     "critRate": 5.0,
     "critDamage": 50.0,
     "impact": 30.0,
-    "_links": {
-      "self": {
-        "href": "http://localhost:8080/bangboos/1/stats/1"
-      }
-    }
+    "links": [
+      { "rel": "self", "href": "http://localhost:8081/bangboos/1/stats/1" }
+    ]
   }
 ]
 ```
@@ -304,9 +312,9 @@ Base URLs: `/bangboos` or `/b`
 ### Get Bangboo Stats by Level
 **URL:** `GET /bangboos/{id}/stats/{level}`  
 **Parameters:** `id` (string) - Bangboo ID, `level` (int) - Level (1-60)  
-**Description:** Returns stats for a specific bangboo at a specific level with navigation links to prev/next levels.
+**Description:** Returns the stats for one level with `self` and `allStats` links. `prev` and `next` are included only when the immediately adjacent level is recorded.
 
-**Caveats:** Bangboo stats are only available for levels 1-60. Navigation links to previous/next levels are only provided when applicable.
+**Caveats:** Supported levels are 1–60, but the bundled sample data contains only levels 1–3 for Amillion. A valid level without a recorded row returns `404`.
 
 ## W-Engines API
 
@@ -324,18 +332,22 @@ Base URLs: `/wengines` or `/w`
     "wengineList": [
       {
         "id": "1",
-        "wengineId": "w001",
-        "name": "Steel Cushion",
-        "description": "A reliable W-Engine for defense",
-        "rarity": "A",
-        "baseAttack": 42,
-        "specialty": "SHIELD",
-        "skillDescriptions": ["Increases DEF by 15%"],
-        "subStatType": "DEF_PER",
-        "subStatBaseValue": 8.0,
+        "wengineId": "1",
+        "name": "Street Superstar",
+        "description": "A versatile W-Engine that boosts attack damage and skill performance.",
+        "rarity": "S",
+        "baseAttack": 594,
+        "specialty": "ATTACK",
+        "skillDescriptions": [
+          "Increases ATK by 25%.",
+          "When the equipping character uses a Basic Attack, Dodge Counter, or Assist Attack, their DMG increases by 20% for 6s."
+        ],
+        "subStatType": null,
+        "subStatBaseValue": null,
+        "version": 1.0,
         "_links": {
           "self": {
-            "href": "http://localhost:8080/wengines/1"
+            "href": "http://localhost:8081/wengines/1"
           }
         }
       }
@@ -343,7 +355,7 @@ Base URLs: `/wengines` or `/w`
   },
   "_links": {
     "self": {
-      "href": "http://localhost:8080/wengines"
+      "href": "http://localhost:8081/wengines"
     }
   }
 }
@@ -399,7 +411,75 @@ Base URLs: `/wengines` or `/w`
 **Parameters:** `from` (float), `to` (float) - Version range  
 **Description:** Returns W-Engines released between the specified versions (inclusive).
 
-**Caveats:** W-Engine upgrade statistics from rank 1 to 5 are not yet implemented. Sub-stat scaling by refinement level is not available through the API. Version-based search endpoints may not function correctly as the WEngine entity currently lacks a version field.
+**Caveats:** Sub-stat fields are `null` when not recorded. The catalog does not calculate level or refinement scaling.
+
+## Drive Discs API
+
+Base URLs: `/discdrives` (also `/dd` or `/discs`) for individual discs, and
+`/discdrivesets` (also `/dds` or `/discsets`) for sets.
+
+### Individual discs
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /discdrives` | HAL collection with discs under `_embedded.discDriveList`. |
+| `GET /discdrives/{id}` | One disc, with a `set` link when assigned to a set. |
+| `GET /discdrives/position/{value}` | Filter by slot (integer 1–6). |
+| `GET /discdrives/type/{value}` | Filter by a [StatTypes](#stattypes) value, such as `CRIT_RATE`. |
+| `GET /discdrives/base_value/{value}` | Filter by a numeric base stat value. |
+| `GET /discdrives/base_value_between/{from}/{to}` | Filter by an inclusive numeric base stat range. |
+| `GET /discdrives/set/{id}` | Filter by set database ID, ordered by position. |
+
+Example: `GET /discdrives/4` with `Accept: application/hal+json`
+
+```json
+{
+  "id": "4",
+  "discDriveId": "woodpecker-electro-4",
+  "position": 4,
+  "type": "CRIT_RATE",
+  "baseValue": 4.8,
+  "discDriveSetId": "1",
+  "_links": {
+    "self": { "href": "http://localhost:8081/discdrives/4" },
+    "set": { "href": "http://localhost:8081/discdrivesets/1" }
+  }
+}
+```
+
+### Disc sets
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /discdrivesets` | HAL collection with sets under `_embedded.discDriveSetList`. |
+| `GET /discdrivesets/{id}` | One set, with its bonus descriptions and a `discs` link. |
+| `GET /discdrivesets/{id}/discs` | HAL collection of discs in the set, ordered by position. A nonexistent set returns `404`. |
+| `GET /discdrivesets/name/{value}` | Exact set name, case-insensitive. |
+| `GET /discdrivesets/name_like/{value}` | Partial set name, case-insensitive. |
+| `GET /discdrivesets/description_like/{value}` | Partial set description, case-insensitive. |
+| `GET /discdrivesets/two_piece_skill_like/{value}` | Partial 2-piece bonus description, case-insensitive. |
+| `GET /discdrivesets/four_piece_skill_like/{value}` | Partial 4-piece bonus description, case-insensitive. |
+
+Example: `GET /discdrivesets/1` with `Accept: application/hal+json`
+
+```json
+{
+  "id": "1",
+  "discDriveSetId": "woodpecker-electro",
+  "name": "Woodpecker Electro",
+  "description": "A set for critical-hit builds.",
+  "twoPieceSkillDescription": "Increases CRIT Rate by 8%.",
+  "fourPieceSkillDescription": "Critical hits with Basic Attacks, Dodge Counters, or EX Special Attacks increase ATK.",
+  "_links": {
+    "self": { "href": "http://localhost:8081/discdrivesets/1" },
+    "discs": { "href": "http://localhost:8081/discdrivesets/1/discs" }
+  }
+}
+```
+
+On a disc, `discDriveSetId` refers to the set's `id` (database ID), not its
+`discDriveSetId` (catalog identifier). The bundled discs are illustrative and do not
+include level progression or all possible stat rolls.
 
 ## API Enums Reference
 
@@ -453,4 +533,13 @@ Valid values for W-Engine sub-stats and disc drive stats:
 
 # How to Use
 
-The API is a Spring Boot application that can be run locally. All endpoints return JSON data with HATEOAS links for navigation. Use the short path aliases (e.g., `/a` instead of `/agents`) for more concise URLs.
+Run the app with Java 17 or newer using `./mvnw spring-boot:run`. It listens on port
+8081 and loads sample data into an in-memory H2 database. For example:
+
+```sh
+curl -H 'Accept: application/hal+json' http://localhost:8081/wengines
+curl -H 'Accept: application/hal+json' http://localhost:8081/bangboos/1/stats/2
+curl -H 'Accept: application/hal+json' http://localhost:8081/discdrivesets/1/discs
+```
+
+Run the test suite with `./mvnw test`; it does not require a separate running server.

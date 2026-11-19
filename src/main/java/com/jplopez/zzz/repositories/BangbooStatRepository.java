@@ -31,4 +31,6 @@ public interface BangbooStatRepository extends JpaRepository<BangbooStat, String
    * @return optional bangboo stat
    */
   Optional<BangbooStat> findByBangbooIdAndLevel(String bangbooId, int level);
+
+  boolean existsByBangbooIdAndLevel(String bangbooId, int level);
 }

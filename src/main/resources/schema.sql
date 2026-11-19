@@ -8,23 +8,25 @@ create table if not exists AGENT(
   SPECIALITY varchar(10)  null,
   TYPE varchar(10)  null,
   FACTION varchar(200)  null,
-  VERSION double precision  null,
+  VERSION real null,
   PRIMARY KEY ( ID )
 );
 
 create table if not exists WENGINE(
-  ID int not null AUTO_INCREMENT,
-  WENGINE_ID varchar(100) not null,
-  NAME varchar(100) not null,
+  ID varchar(100) primary key,
+  WENGINE_ID varchar(100) not null unique,
+  NAME varchar(100) not null unique,
   DESCRIPTION varchar(1000) null,
   RARITY varchar(1) null,
   BASE_ATTACK int null,
   SPECIALTY varchar(10) null,
-  PRIMARY KEY ( ID )
+  SUB_STAT_TYPE varchar(30) null,
+  SUB_STAT_BASE_VALUE real null,
+  VERSION real not null default 1.0
 );
 
 create table if not exists WENGINE_SKILL_DESCRIPTIONS(
-  WENGINE_ID int not null,
+  WENGINE_ID varchar(100) not null,
   SKILL_DESCRIPTIONS varchar(1000) not null,
   FOREIGN KEY (WENGINE_ID) REFERENCES public.WENGINE(ID)
 );
@@ -57,11 +59,43 @@ create table if not exists SKILL_STAT(
 );
 
 create table if not exists BANGBOO(
-  ID int not null AUTO_INCREMENT,
-  BANGBOO_ID varchar(100) not null,
-  NAME varchar(100) not null,
+  ID varchar(100) primary key,
+  BANGBOO_ID varchar(100) not null unique,
+  NAME varchar(100) not null unique,
   RARITY varchar(1) null,
   FACTION varchar(200) null,
-  VERSION double precision null,
-  PRIMARY KEY ( ID )
+  VERSION real null
 );
+
+create table if not exists BANGBOO_STAT(
+  ID varchar(100) primary key,
+  BANGBOO_ID varchar(100) not null references BANGBOO(ID),
+  LEVEL int not null check (LEVEL between 1 and 60),
+  HP real not null,
+  ATK real not null,
+  DEF real not null,
+  CRIT_RATE real not null,
+  CRIT_DAMAGE real not null,
+  IMPACT real not null,
+  unique (BANGBOO_ID, LEVEL)
+);
+
+create table if not exists DISC_DRIVE_SET(
+  ID varchar(100) primary key,
+  DISC_DRIVE_SET_ID varchar(100) not null unique,
+  NAME varchar(100) not null unique,
+  DESCRIPTION varchar(1000) null,
+  TWO_PIECE_SKILL_DESCRIPTION varchar(1000) null,
+  FOUR_PIECE_SKILL_DESCRIPTION varchar(1000) null
+);
+
+create table if not exists DISC_DRIVE(
+  ID varchar(100) primary key,
+  DISC_DRIVE_ID varchar(100) not null unique,
+  POSITION int not null check (POSITION between 1 and 6),
+  TYPE varchar(30) null,
+  BASE_VALUE real null,
+  DISC_DRIVE_SET_ID varchar(100) null references DISC_DRIVE_SET(ID)
+);
+
+create index if not exists DISC_DRIVE_SET_POSITION_IDX on DISC_DRIVE (DISC_DRIVE_SET_ID, POSITION);
