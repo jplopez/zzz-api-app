@@ -123,7 +123,7 @@ Use `/bangboos/{id}/stats/{statType}` for all recorded levels, or append `/{leve
 for a single level. Use `/bangboos/{id}/skills` to discover skills and
 `/bangboos/{id}/skills/{skillId}/stats` (optionally followed by `/{level}`) for that
 skill's values. You can add `?statId={statId}` to narrow any atomic stat response.
-See [the shared route and response reference](README.md#atomic-stats-and-skills).
+See [Bangboo skills and stats in the README](README.md#bangboo-skills-and-stats).
 
 ## Data Model
 
