@@ -1,0 +1,322 @@
+openapi: 3.1.0
+info:
+  title: ZZZ Drive Disc Simulation API
+  version: '1.0.0'
+  description: Stateless Drive Disc upgrades, forecasts, and comparisons. Keep the returned session and send it on each action.
+servers:
+  - url: /
+paths:
+  /v1/disc-rules:
+    get:
+      summary: Read a bundled rules snapshot
+      parameters:
+        - name: version
+          in: query
+          description: Defaults to the latest bundled version (2.5).
+          schema: {type: string}
+          example: '2.4'
+      responses:
+        '200':
+          description: Rules with rarity caps, upgrade levels, starting counts, versioned stat values and weights. Each main-stat values array starts at level 0.
+          headers:
+            ETag: {schema: {type: string}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DiscRules'}
+              examples:
+                archived:
+                  externalValue: ./disc-rules?version=2.4
+        '304': {description: Not modified.}
+        '409': {$ref: '#/components/responses/Problem'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/schemas/disc-session.json:
+    get:
+      summary: Read the v1 session JSON Schema
+      responses:
+        '200':
+          description: Draft 2020-12 JSON Schema; message shapes live in its $defs.
+          headers:
+            ETag: {schema: {type: string}}
+          content:
+            application/schema+json:
+              schema: {type: object}
+              examples:
+                schema:
+                  externalValue: ./schemas/disc-session.json
+        '304': {description: Not modified.}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/disc-sessions:
+    post:
+      summary: Start a session from an explicit disc state
+      description: A supplied seed makes creation reproducible. Omitting the seed starts a new random sequence.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: './schemas/disc-session.json#/$defs/CreateSessionRequest'}
+            example:
+              initial: &initial
+                rarity: S
+                slot: 4
+                main_stat: crit_rate
+                level: 14
+                substats:
+                  - {stat: atk_pct, rolls: 4}
+                  - {stat: crit_dmg, rolls: 2}
+                  - {stat: hp, rolls: 1}
+                  - {stat: pen, rolls: 1}
+              seed: 42
+              rules_version: '2.5'
+      responses:
+        '200':
+          description: A new client-owned session.
+          content:
+            application/json:
+              schema: {$ref: './schemas/disc-session.json#/$defs/SessionResponse'}
+              example: &created
+                session: &session
+                  schema_version: 1
+                  rules_version: '2.5'
+                  initial: *initial
+                  disc: *initial
+                  history: []
+                  rng: {algorithm: pcg32, seed: 42, draws: 0}
+                actions: &remaining_actions
+                  next_level: {method: POST, href: /v1/disc-sessions/step, send: [session], body: {to_level: 15}, rolls: true}
+                  next_roll: {method: POST, href: /v1/disc-sessions/step, send: [session], body: {to_level: 15}, rolls: true, levels_skipped: 0}
+                  forecast: &forecast_action {method: POST, href: /v1/disc-sessions/forecast, send: [session], body: {}}
+                complete: false
+        '400': {$ref: '#/components/responses/Problem'}
+        '409': {$ref: '#/components/responses/Problem'}
+        '413': {$ref: '#/components/responses/Problem'}
+        '422': {$ref: '#/components/responses/Problem'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/disc-sessions/step:
+    post:
+      summary: Advance through at most one substat roll
+      description: Omitting observe draws from the session RNG. With observe, the target must itself be a roll level and no draw is consumed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: './schemas/disc-session.json#/$defs/StepRequest'}
+            example:
+              session: *session
+              to_level: 15
+              observe: {stat: crit_dmg}
+              weights: &crit_weights {crit_rate: 1, crit_dmg: 1}
+      responses:
+        '200':
+          description: Updated session, appended events, summary, and actions.
+          content:
+            application/json:
+              schema: {$ref: './schemas/disc-session.json#/$defs/StepResponse'}
+              example:
+                session: &enhanced
+                  schema_version: 1
+                  rules_version: '2.5'
+                  initial: *initial
+                  disc:
+                    rarity: S
+                    slot: 4
+                    main_stat: crit_rate
+                    level: 15
+                    substats:
+                      - {stat: atk_pct, rolls: 4}
+                      - {stat: crit_dmg, rolls: 3}
+                      - {stat: hp, rolls: 1}
+                      - {stat: pen, rolls: 1}
+                  history: &observed_history
+                    - {n: 1, level: 15, kind: roll, source: observed, effect: upgraded, stat: crit_dmg}
+                  rng: {algorithm: pcg32, seed: 42, draws: 0}
+                result:
+                  events: *observed_history
+                  disc:
+                    level: 15
+                    main_stat: crit_rate
+                    main_value: 24
+                    substats:
+                      - {stat: atk_pct, rolls: 4, value: 12}
+                      - {stat: crit_dmg, rolls: 3, value: 14.4}
+                      - {stat: hp, rolls: 1, value: 112}
+                      - {stat: pen, rolls: 1, value: 9}
+                    score: 38.4
+                actions:
+                  forecast: *forecast_action
+                  undo: {method: POST, href: /v1/disc-sessions/rewind, send: [session], body: {fork: false, to_event: 0}}
+                  fork: {method: POST, href: /v1/disc-sessions/rewind, send: [session], body: {fork: true, to_event: 1}}
+                complete: true
+        '400': {$ref: '#/components/responses/Problem'}
+        '409': {$ref: '#/components/responses/Problem'}
+        '413': {$ref: '#/components/responses/Problem'}
+        '422': {$ref: '#/components/responses/StepRejected'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/disc-sessions/rewind:
+    post:
+      summary: Keep a history prefix, optionally with a new RNG seed
+      description: to_event is a count of retained events. Undo preserves the draw counter. A fork resets draws and is deterministic even when it derives the seed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: './schemas/disc-session.json#/$defs/RewindRequest'}
+            example: {session: *enhanced, to_event: 0, fork: false}
+      responses:
+        '200':
+          description: Session replayed from initial over the retained history.
+          content:
+            application/json:
+              schema: {$ref: './schemas/disc-session.json#/$defs/SessionResponse'}
+              example: *created
+        '400': {$ref: '#/components/responses/Problem'}
+        '409': {$ref: '#/components/responses/Problem'}
+        '413': {$ref: '#/components/responses/Problem'}
+        '422': {$ref: '#/components/responses/Problem'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/disc-sessions/forecast:
+    post:
+      summary: Enumerate exact outcomes under the configured model
+      description: The supplied session is returned unchanged. Target defaults to its rarity cap. Thresholds require weights. Probabilities are exact under the uniform model, not verified game odds.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: './schemas/disc-session.json#/$defs/ForecastRequest'}
+            example: {session: *session, weights: *crit_weights, thresholds: [36]}
+      responses:
+        '200':
+          description: Distribution over final roll counts, with optional expected score and threshold probabilities.
+          content:
+            application/json:
+              schema: {$ref: './schemas/disc-session.json#/$defs/ForecastResponse'}
+              example:
+                session: *session
+                result:
+                  probability_model: uniform
+                  upgrades_remaining: 1
+                  expected_score: 34.8
+                  p_at_least: [{score: 36, probability: 0.25}]
+                  outcomes:
+                    - probability: 0.25
+                      score: 33.6
+                      substats: [{stat: atk_pct, rolls: 5}, {stat: crit_dmg, rolls: 2}, {stat: hp, rolls: 1}, {stat: pen, rolls: 1}]
+                    - probability: 0.25
+                      score: 38.4
+                      substats: [{stat: atk_pct, rolls: 4}, {stat: crit_dmg, rolls: 3}, {stat: hp, rolls: 1}, {stat: pen, rolls: 1}]
+                    - probability: 0.25
+                      score: 33.6
+                      substats: [{stat: atk_pct, rolls: 4}, {stat: crit_dmg, rolls: 2}, {stat: hp, rolls: 2}, {stat: pen, rolls: 1}]
+                    - probability: 0.25
+                      score: 33.6
+                      substats: [{stat: atk_pct, rolls: 4}, {stat: crit_dmg, rolls: 2}, {stat: hp, rolls: 1}, {stat: pen, rolls: 2}]
+                actions: *remaining_actions
+                complete: false
+        '400': {$ref: '#/components/responses/Problem'}
+        '409': {$ref: '#/components/responses/Problem'}
+        '413': {$ref: '#/components/responses/Problem'}
+        '422': {$ref: '#/components/responses/Problem'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /v1/disc-comparisons:
+    post:
+      summary: Score and rank 2 to 12 discs
+      description: Weights apply to main and substat values. Rank by expected cap score, then current score, then input order. Sessions retain their own rules version.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: './schemas/disc-session.json#/$defs/ComparisonRequest'}
+            example:
+              weights: *crit_weights
+              discs:
+                - *session
+                - rarity: S
+                  slot: 1
+                  main_stat: hp
+                  level: 14
+                  substats: [{stat: atk_pct, rolls: 4}, {stat: crit_dmg, rolls: 2}, {stat: def, rolls: 1}, {stat: pen, rolls: 1}]
+      responses:
+        '200':
+          description: Scores and one-based ranks in input order. Mixed slots are allowed with a warning.
+          content:
+            application/json:
+              schema: {$ref: './schemas/disc-session.json#/$defs/ComparisonResponse'}
+              example:
+                results:
+                  - {index: 0, slot: 4, rules_version: '2.5', current_score: 32.4, expected_final_score: 34.8, rank: 1}
+                  - {index: 1, slot: 1, rules_version: '2.5', current_score: 9.6, expected_final_score: 10.8, rank: 2}
+                warnings: [mixed-slots]
+        '400': {$ref: '#/components/responses/Problem'}
+        '409': {$ref: '#/components/responses/Problem'}
+        '413': {$ref: '#/components/responses/Problem'}
+        '422': {$ref: '#/components/responses/Problem'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+components:
+  schemas:
+    DiscRules:
+      type: object
+      required: [rules_version, probability_model, source, rarities]
+      properties:
+        rules_version: {$ref: './schemas/disc-session.json#/$defs/RulesVersion'}
+        probability_model:
+          const: uniform
+          description: Equal odds among eligible substats, not verified game probabilities.
+        source: {type: string, format: uri}
+        rarities:
+          type: object
+          required: [B, A, S]
+          properties:
+            B: {$ref: '#/components/schemas/RarityRules'}
+            A: {$ref: '#/components/schemas/RarityRules'}
+            S: {$ref: '#/components/schemas/RarityRules'}
+    RarityRules:
+      type: object
+      required: [level_cap, upgrade_levels, starting_substat_counts, max_substats, roll_cap, substats, main_stats]
+      properties:
+        level_cap: {type: integer}
+        upgrade_levels: {type: array, items: {type: integer}}
+        starting_substat_counts: {type: array, items: {type: integer}}
+        max_substats: {type: integer}
+        roll_cap: {type: integer, description: Maximum rolls in one substat, counting its first appearance.}
+        substats:
+          type: object
+          additionalProperties:
+            type: object
+            required: [unit, base_value, add_weight, upgrade_weight]
+            properties:
+              unit: &unit {enum: [number, percentage], description: Percentage values are in percentage points.}
+              base_value: {type: number}
+              add_weight: {type: integer}
+              upgrade_weight: {type: integer}
+        main_stats:
+          type: object
+          description: Slot number to a map of eligible main stat IDs and their values.
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: object
+              required: [unit, values]
+              properties:
+                unit: *unit
+                values: {type: array, items: {type: number}, description: Indexed by level starting at zero.}
+  responses:
+    Problem:
+      description: RFC 9457 problem details. A 409 lists supported_rules_versions.
+      content: &problem_content
+        application/problem+json:
+          schema: {$ref: './schemas/disc-session.json#/$defs/ProblemDetails'}
+    RateLimited:
+      description: Too many simulation requests for this client.
+      headers:
+        Retry-After: {schema: {type: integer, minimum: 1}}
+      content: *problem_content
+    StepRejected:
+      description: Invalid session, target level, or observed stat.
+      content:
+        application/problem+json:
+          schema: {$ref: './schemas/disc-session.json#/$defs/ProblemDetails'}
+          example:
+            type: multiple-rolls
+            title: Unprocessable Entity
+            status: 422
+            detail: A step cannot cross more than one roll level
+            errors: [{pointer: /to_level, message: A step cannot cross more than one roll level}]

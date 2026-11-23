@@ -1,0 +1,973 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zzz:disc-simulation:session:v1",
+  "title": "ZZZ Drive Disc Simulation: session and messages",
+  "description": "The root validates a Session document. Request and response messages live under $defs and are referenced as disc-session.json#/$defs/<Name>. This schema checks shape only: stat legality, roll caps, level caps and replay consistency are checked server-side against rules_version.",
+  "$ref": "#/$defs/Session",
+  "examples": [
+    {
+      "schema_version": 1,
+      "rules_version": "2.5",
+      "initial": {
+        "rarity": "S",
+        "slot": 4,
+        "main_stat": "crit_rate",
+        "level": 0,
+        "substats": [
+          {
+            "stat": "atk_pct",
+            "rolls": 1
+          },
+          {
+            "stat": "crit_dmg",
+            "rolls": 1
+          },
+          {
+            "stat": "hp",
+            "rolls": 1
+          }
+        ]
+      },
+      "disc": {
+        "rarity": "S",
+        "slot": 4,
+        "main_stat": "crit_rate",
+        "level": 3,
+        "substats": [
+          {
+            "stat": "atk_pct",
+            "rolls": 1
+          },
+          {
+            "stat": "crit_dmg",
+            "rolls": 1
+          },
+          {
+            "stat": "hp",
+            "rolls": 1
+          },
+          {
+            "stat": "pen",
+            "rolls": 1
+          }
+        ]
+      },
+      "history": [
+        {
+          "n": 1,
+          "level": 1,
+          "kind": "level"
+        },
+        {
+          "n": 2,
+          "level": 2,
+          "kind": "level"
+        },
+        {
+          "n": 3,
+          "level": 3,
+          "kind": "roll",
+          "source": "simulated",
+          "effect": "added",
+          "stat": "pen",
+          "draw": 0
+        }
+      ],
+      "rng": {
+        "algorithm": "pcg32",
+        "seed": 8856,
+        "draws": 1
+      },
+      "meta": {
+        "label": "Slot 4 crit rate test"
+      }
+    }
+  ],
+  "$defs": {
+    "StatId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,31}$",
+      "description": "Snake_case stat identifier. Which ids are legal for a slot, as main stat or substat, is defined by the rules for rules_version, not by this schema.",
+      "examples": [
+        "hp",
+        "atk_pct",
+        "crit_rate",
+        "crit_dmg",
+        "pen",
+        "anomaly_proficiency"
+      ]
+    },
+    "Rarity": {
+      "enum": [
+        "B",
+        "A",
+        "S"
+      ]
+    },
+    "Slot": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "Substat": {
+      "type": "object",
+      "required": [
+        "stat",
+        "rolls"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "stat": {
+          "$ref": "#/$defs/StatId"
+        },
+        "rolls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "How many times the fixed base value has been applied, including the initial roll. Displayed value = base_value(rarity, stat) * rolls. Per-rarity caps come from the rules."
+        }
+      }
+    },
+    "DiscState": {
+      "type": "object",
+      "required": [
+        "rarity",
+        "slot",
+        "main_stat",
+        "level",
+        "substats"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "set_id": {
+          "type": [
+            "string",
+            "integer"
+          ],
+          "description": "Optional reference to a drive disc set in the data API.",
+          "minLength": 1,
+          "maxLength": 100,
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "rarity": {
+          "$ref": "#/$defs/Rarity"
+        },
+        "slot": {
+          "$ref": "#/$defs/Slot"
+        },
+        "main_stat": {
+          "$ref": "#/$defs/StatId"
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "substats": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/Substat"
+          },
+          "description": "Unique eligible substats, none equal to the main stat. The rolls must be reachable by this level under its rarity rules."
+        }
+      }
+    },
+    "LevelEvent": {
+      "type": "object",
+      "description": "A level where only the main stat increases. No randomness.",
+      "required": [
+        "n",
+        "level",
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based event index.",
+          "maximum": 15
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15
+        },
+        "kind": {
+          "const": "level"
+        }
+      }
+    },
+    "RollEvent": {
+      "type": "object",
+      "description": "A level that adds a new substat or upgrades an existing one.",
+      "required": [
+        "n",
+        "level",
+        "kind",
+        "source",
+        "effect",
+        "stat"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15
+        },
+        "kind": {
+          "const": "roll"
+        },
+        "source": {
+          "enum": [
+            "simulated",
+            "observed"
+          ],
+          "description": "simulated = drawn by the server RNG; observed = entered by the player from a real disc."
+        },
+        "effect": {
+          "enum": [
+            "added",
+            "upgraded"
+          ]
+        },
+        "stat": {
+          "$ref": "#/$defs/StatId"
+        },
+        "draw": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "RNG draw index. Required for simulated rolls, forbidden for observed ones.",
+          "maximum": 9007199254740990
+        }
+      },
+      "if": {
+        "required": [
+          "source"
+        ],
+        "properties": {
+          "source": {
+            "const": "simulated"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "draw"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "draw"
+          ]
+        }
+      }
+    },
+    "HistoryEvent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/LevelEvent"
+        },
+        {
+          "$ref": "#/$defs/RollEvent"
+        }
+      ]
+    },
+    "Rng": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "seed",
+        "draws"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "enum": [
+            "pcg32"
+          ]
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "draws": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of draws consumed so far. Undo does not rewind this, so replaying a level gives a fresh outcome.",
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "Meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "forked_from": {
+          "type": "object",
+          "required": [
+            "seed",
+            "at_event"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "seed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "at_event": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Number of events retained when the fork was created. Later undo may shorten the history past this point."
+            }
+          }
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "rules_version",
+        "initial",
+        "disc",
+        "history",
+        "rng"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "$schema": {
+          "type": "string",
+          "format": "uri"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "rules_version": {
+          "$ref": "#/$defs/RulesVersion"
+        },
+        "initial": {
+          "$ref": "#/$defs/DiscState",
+          "description": "Disc state when the session started. Any level, so real discs can be imported mid-upgrade."
+        },
+        "disc": {
+          "$ref": "#/$defs/DiscState",
+          "description": "Derived state. MUST be sent back unchanged and equal the replay of history over initial."
+        },
+        "history": {
+          "type": "array",
+          "maxItems": 15,
+          "items": {
+            "$ref": "#/$defs/HistoryEvent"
+          },
+          "description": "One ordered event per level since initial. Rewind truncates the suffix; replay applies the stored outcomes."
+        },
+        "rng": {
+          "$ref": "#/$defs/Rng"
+        },
+        "meta": {
+          "$ref": "#/$defs/Meta"
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "description": "Hypermedia action descriptor. Because the server is stateless, the client executes it by attaching the fields named in send.",
+      "required": [
+        "method",
+        "href"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "GET",
+            "POST"
+          ]
+        },
+        "href": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "send": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "session"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "body": {
+          "type": "object"
+        },
+        "rolls": {
+          "type": "boolean",
+          "description": "True when the target level triggers a substat roll."
+        },
+        "levels_skipped": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Main-stat-only levels applied on the way to the next roll."
+        }
+      }
+    },
+    "Actions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "next_level": {
+          "$ref": "#/$defs/Action"
+        },
+        "next_roll": {
+          "$ref": "#/$defs/Action"
+        },
+        "forecast": {
+          "$ref": "#/$defs/Action"
+        },
+        "undo": {
+          "$ref": "#/$defs/Action"
+        },
+        "fork": {
+          "$ref": "#/$defs/Action"
+        }
+      },
+      "required": [
+        "forecast"
+      ]
+    },
+    "SubstatValue": {
+      "type": "object",
+      "required": [
+        "stat",
+        "rolls",
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "stat": {
+          "$ref": "#/$defs/StatId"
+        },
+        "rolls": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "value": {
+          "type": "number"
+        }
+      }
+    },
+    "DiscSummary": {
+      "type": "object",
+      "required": [
+        "level",
+        "main_stat",
+        "main_value",
+        "substats"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "main_stat": {
+          "$ref": "#/$defs/StatId"
+        },
+        "main_value": {
+          "type": "number"
+        },
+        "substats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SubstatValue"
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "score": {
+          "type": "number",
+          "description": "Present when the request supplied weights."
+        }
+      }
+    },
+    "CreateSessionRequest": {
+      "type": "object",
+      "required": [
+        "initial"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "initial": {
+          "$ref": "#/$defs/DiscState"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "Optional. The server generates one when omitted."
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "rules_version": {
+          "$ref": "#/$defs/RulesVersion",
+          "description": "Defaults to the latest bundled version."
+        }
+      }
+    },
+    "SessionResponse": {
+      "type": "object",
+      "required": [
+        "session",
+        "actions",
+        "complete"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "actions": {
+          "$ref": "#/$defs/Actions"
+        },
+        "complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "StepRequest": {
+      "type": "object",
+      "required": [
+        "session",
+        "to_level"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "to_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "description": "Target level. A single call may not cross more than one roll level."
+        },
+        "observe": {
+          "type": "object",
+          "required": [
+            "stat"
+          ],
+          "additionalProperties": false,
+          "description": "Replace the simulated roll at to_level with an observed outcome. to_level must be an upgrade level.",
+          "properties": {
+            "stat": {
+              "$ref": "#/$defs/StatId"
+            }
+          }
+        },
+        "weights": {
+          "$ref": "#/$defs/Weights"
+        }
+      }
+    },
+    "StepResponse": {
+      "type": "object",
+      "required": [
+        "session",
+        "result",
+        "actions",
+        "complete"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "result": {
+          "type": "object",
+          "required": [
+            "events",
+            "disc"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "events": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/HistoryEvent"
+              },
+              "description": "Events appended by this call, in order.",
+              "maxItems": 15
+            },
+            "disc": {
+              "$ref": "#/$defs/DiscSummary"
+            }
+          }
+        },
+        "actions": {
+          "$ref": "#/$defs/Actions"
+        },
+        "complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RewindRequest": {
+      "type": "object",
+      "required": [
+        "session",
+        "to_event"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "to_event": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Keep events with n <= to_event. 0 returns to the initial state.",
+          "maximum": 15
+        },
+        "fork": {
+          "type": "boolean",
+          "default": false,
+          "description": "false = undo: history is truncated but rng.draws is kept. true = fork: new seed, draws reset, meta.forked_from set."
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295,
+          "description": "Optional distinct seed for a fork. If omitted, the API derives a repeatable new seed."
+        }
+      }
+    },
+    "Weights": {
+      "type": "object",
+      "description": "Nonnegative score weight per stat. A missing weight is zero. Apply the weights to the main and substat values, with percentages in points.",
+      "propertyNames": {
+        "$ref": "#/$defs/StatId"
+      },
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0
+      },
+      "maxProperties": 16
+    },
+    "ForecastRequest": {
+      "type": "object",
+      "required": [
+        "session"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "weights": {
+          "$ref": "#/$defs/Weights"
+        },
+        "target_level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15
+        },
+        "thresholds": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "number"
+          },
+          "description": "Scores for which to return P(score >= threshold)."
+        }
+      }
+    },
+    "ForecastOutcome": {
+      "type": "object",
+      "required": [
+        "probability",
+        "substats"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "score": {
+          "type": "number"
+        },
+        "substats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Substat"
+          },
+          "minItems": 1,
+          "maxItems": 4
+        }
+      }
+    },
+    "ForecastResponse": {
+      "type": "object",
+      "required": [
+        "session",
+        "result",
+        "actions",
+        "complete"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "$ref": "#/$defs/Session"
+        },
+        "result": {
+          "type": "object",
+          "required": [
+            "probability_model",
+            "upgrades_remaining",
+            "outcomes"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "probability_model": {
+              "const": "uniform",
+              "description": "Exact under equal odds among eligible stats, not verified game odds."
+            },
+            "upgrades_remaining": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "expected_score": {
+              "type": "number"
+            },
+            "p_at_least": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "score",
+                  "probability"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "score": {
+                    "type": "number"
+                  },
+                  "probability": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              },
+              "maxItems": 8
+            },
+            "outcomes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ForecastOutcome"
+              },
+              "description": "Exact distribution, outcomes grouped by final roll counts. Probabilities sum to 1."
+            }
+          }
+        },
+        "actions": {
+          "$ref": "#/$defs/Actions"
+        },
+        "complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "description": "RFC 9457 problem details.",
+      "required": [
+        "type",
+        "title",
+        "status"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "uri-reference"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 400,
+          "maximum": 599
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "pointer",
+              "message"
+            ],
+            "properties": {
+              "pointer": {
+                "type": "string",
+                "description": "JSON Pointer into the request body."
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "maxItems": 20
+        },
+        "supported_rules_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Returned with 409 when rules_version is unknown."
+        },
+        "retry_after": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Seconds until another request can be attempted after a 429."
+        }
+      }
+    },
+    "RulesVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "maxLength": 24,
+      "description": "The immutable, bundled game rules snapshot to use."
+    },
+    "ComparisonRequest": {
+      "type": "object",
+      "required": [
+        "discs",
+        "weights"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "discs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Session"
+              },
+              {
+                "$ref": "#/$defs/DiscState"
+              }
+            ]
+          }
+        },
+        "weights": {
+          "$ref": "#/$defs/Weights"
+        },
+        "rules_version": {
+          "$ref": "#/$defs/RulesVersion",
+          "description": "Rules for bare states, defaulting to the latest. Sessions keep their own version."
+        }
+      }
+    },
+    "ComparisonResult": {
+      "type": "object",
+      "required": [
+        "index",
+        "slot",
+        "rules_version",
+        "current_score",
+        "expected_final_score",
+        "rank"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11
+        },
+        "slot": {
+          "$ref": "#/$defs/Slot"
+        },
+        "rules_version": {
+          "$ref": "#/$defs/RulesVersion"
+        },
+        "current_score": {
+          "type": "number"
+        },
+        "expected_final_score": {
+          "type": "number"
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        }
+      }
+    },
+    "ComparisonResponse": {
+      "type": "object",
+      "required": [
+        "results",
+        "warnings"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "results": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/ComparisonResult"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "const": "mixed-slots"
+          },
+          "maxItems": 1
+        }
+      }
+    }
+  }
+}
