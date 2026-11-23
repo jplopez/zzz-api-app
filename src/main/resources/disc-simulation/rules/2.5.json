@@ -1,0 +1,178 @@
+{
+  "rules_version": "2.5",
+  "probability_model": "uniform",
+  "source": "https://github.com/malu-no996/ZenlessData/tree/f7064682fe461223dd9ee621191b574abd9c3014/FileCfg",
+  "rarities": {
+    "B": {
+      "level_cap": 9,
+      "upgrade_levels": [3, 6, 9],
+      "starting_substat_counts": [1, 2],
+      "max_substats": 4,
+      "roll_cap": 2,
+      "substats": {
+        "anomaly_proficiency": {"unit": "number", "base_value": 3, "add_weight": 1, "upgrade_weight": 1},
+        "atk": {"unit": "number", "base_value": 6, "add_weight": 1, "upgrade_weight": 1},
+        "atk_pct": {"unit": "percentage", "base_value": 1, "add_weight": 1, "upgrade_weight": 1},
+        "crit_dmg": {"unit": "percentage", "base_value": 1.6, "add_weight": 1, "upgrade_weight": 1},
+        "crit_rate": {"unit": "percentage", "base_value": 0.8, "add_weight": 1, "upgrade_weight": 1},
+        "def": {"unit": "number", "base_value": 5, "add_weight": 1, "upgrade_weight": 1},
+        "def_pct": {"unit": "percentage", "base_value": 1.6, "add_weight": 1, "upgrade_weight": 1},
+        "hp": {"unit": "number", "base_value": 37, "add_weight": 1, "upgrade_weight": 1},
+        "hp_pct": {"unit": "percentage", "base_value": 1, "add_weight": 1, "upgrade_weight": 1},
+        "pen": {"unit": "number", "base_value": 3, "add_weight": 1, "upgrade_weight": 1}
+      },
+      "main_stats": {
+        "1": {
+          "hp": {"unit": "number", "values": [183, 243.9939, 305.0061, 366, 426.9939, 488.0061, 549, 609.9939, 671.0061, 732]}
+        },
+        "2": {
+          "atk": {"unit": "number", "values": [26, 34.6658, 43.3342, 52, 60.6658, 69.3342, 78, 86.6658, 95.3342, 104]}
+        },
+        "3": {
+          "def": {"unit": "number", "values": [15, 19.9995, 25.0005, 30, 34.9995, 40.0005, 45, 49.9995, 55.0005, 60]}
+        },
+        "4": {
+          "anomaly_proficiency": {"unit": "number", "values": [8, 10.6664, 13.3336, 16, 18.6664, 21.3336, 24, 26.6664, 29.3336, 32]},
+          "atk_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "crit_dmg": {"unit": "percentage", "values": [4, 5.3332, 6.6668, 8, 9.3332, 10.6668, 12, 13.3332, 14.6668, 16]},
+          "crit_rate": {"unit": "percentage", "values": [2, 2.6666, 3.3334, 4, 4.6666, 5.3334, 6, 6.6666, 7.3334, 8]},
+          "def_pct": {"unit": "percentage", "values": [4, 5.3332, 6.6668, 8, 9.3332, 10.6668, 12, 13.3332, 14.6668, 16]},
+          "hp_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]}
+        },
+        "5": {
+          "atk_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "def_pct": {"unit": "percentage", "values": [4, 5.3332, 6.6668, 8, 9.3332, 10.6668, 12, 13.3332, 14.6668, 16]},
+          "electric_dmg": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "ether_dmg": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "fire_dmg": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "hp_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "ice_dmg": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "pen_ratio": {"unit": "percentage", "values": [2, 2.6666, 3.3334, 4, 4.6666, 5.3334, 6, 6.6666, 7.3334, 8]},
+          "physical_dmg": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]}
+        },
+        "6": {
+          "anomaly_mastery": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "atk_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "def_pct": {"unit": "percentage", "values": [4, 5.3332, 6.6668, 8, 9.3332, 10.6668, 12, 13.3332, 14.6668, 16]},
+          "energy_regen": {"unit": "percentage", "values": [5, 6.6665, 8.3335, 10, 11.6665, 13.3335, 15, 16.6665, 18.3335, 20]},
+          "hp_pct": {"unit": "percentage", "values": [2.5, 3.33325, 4.16675, 5, 5.83325, 6.66675, 7.5, 8.33325, 9.16675, 10]},
+          "impact": {"unit": "percentage", "values": [1.5, 1.99995, 2.50005, 3, 3.49995, 4.00005, 4.5, 4.99995, 5.50005, 6]}
+        }
+      }
+    },
+    "A": {
+      "level_cap": 12,
+      "upgrade_levels": [3, 6, 9, 12],
+      "starting_substat_counts": [2, 3],
+      "max_substats": 4,
+      "roll_cap": 4,
+      "substats": {
+        "anomaly_proficiency": {"unit": "number", "base_value": 6, "add_weight": 1, "upgrade_weight": 1},
+        "atk": {"unit": "number", "base_value": 13, "add_weight": 1, "upgrade_weight": 1},
+        "atk_pct": {"unit": "percentage", "base_value": 2, "add_weight": 1, "upgrade_weight": 1},
+        "crit_dmg": {"unit": "percentage", "base_value": 3.2, "add_weight": 1, "upgrade_weight": 1},
+        "crit_rate": {"unit": "percentage", "base_value": 1.6, "add_weight": 1, "upgrade_weight": 1},
+        "def": {"unit": "number", "base_value": 10, "add_weight": 1, "upgrade_weight": 1},
+        "def_pct": {"unit": "percentage", "base_value": 3.2, "add_weight": 1, "upgrade_weight": 1},
+        "hp": {"unit": "number", "base_value": 75, "add_weight": 1, "upgrade_weight": 1},
+        "hp_pct": {"unit": "percentage", "base_value": 2, "add_weight": 1, "upgrade_weight": 1},
+        "pen": {"unit": "number", "base_value": 6, "add_weight": 1, "upgrade_weight": 1}
+      },
+      "main_stats": {
+        "1": {
+          "hp": {"unit": "number", "values": [367, 458.75, 550.5, 642.25, 734, 825.75, 917.5, 1009.25, 1101, 1192.75, 1284.5, 1376.25, 1468]}
+        },
+        "2": {
+          "atk": {"unit": "number", "values": [53, 66.25, 79.5, 92.75, 106, 119.25, 132.5, 145.75, 159, 172.25, 185.5, 198.75, 212]}
+        },
+        "3": {
+          "def": {"unit": "number", "values": [31, 38.75, 46.5, 54.25, 62, 69.75, 77.5, 85.25, 93, 100.75, 108.5, 116.25, 124]}
+        },
+        "4": {
+          "anomaly_proficiency": {"unit": "number", "values": [15, 18.75, 22.5, 26.25, 30, 33.75, 37.5, 41.25, 45, 48.75, 52.5, 56.25, 60]},
+          "atk_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "crit_dmg": {"unit": "percentage", "values": [8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]},
+          "crit_rate": {"unit": "percentage", "values": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]},
+          "def_pct": {"unit": "percentage", "values": [8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]},
+          "hp_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]}
+        },
+        "5": {
+          "atk_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "def_pct": {"unit": "percentage", "values": [8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]},
+          "electric_dmg": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "ether_dmg": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "fire_dmg": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "hp_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "ice_dmg": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "pen_ratio": {"unit": "percentage", "values": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]},
+          "physical_dmg": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]}
+        },
+        "6": {
+          "anomaly_mastery": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "atk_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "def_pct": {"unit": "percentage", "values": [8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32]},
+          "energy_regen": {"unit": "percentage", "values": [10, 12.5, 15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 35, 37.5, 40]},
+          "hp_pct": {"unit": "percentage", "values": [5, 6.25, 7.5, 8.75, 10, 11.25, 12.5, 13.75, 15, 16.25, 17.5, 18.75, 20]},
+          "impact": {"unit": "percentage", "values": [3, 3.75, 4.5, 5.25, 6, 6.75, 7.5, 8.25, 9, 9.75, 10.5, 11.25, 12]}
+        }
+      }
+    },
+    "S": {
+      "level_cap": 15,
+      "upgrade_levels": [3, 6, 9, 12, 15],
+      "starting_substat_counts": [3, 4],
+      "max_substats": 4,
+      "roll_cap": 6,
+      "substats": {
+        "anomaly_proficiency": {"unit": "number", "base_value": 9, "add_weight": 1, "upgrade_weight": 1},
+        "atk": {"unit": "number", "base_value": 19, "add_weight": 1, "upgrade_weight": 1},
+        "atk_pct": {"unit": "percentage", "base_value": 3, "add_weight": 1, "upgrade_weight": 1},
+        "crit_dmg": {"unit": "percentage", "base_value": 4.8, "add_weight": 1, "upgrade_weight": 1},
+        "crit_rate": {"unit": "percentage", "base_value": 2.4, "add_weight": 1, "upgrade_weight": 1},
+        "def": {"unit": "number", "base_value": 15, "add_weight": 1, "upgrade_weight": 1},
+        "def_pct": {"unit": "percentage", "base_value": 4.8, "add_weight": 1, "upgrade_weight": 1},
+        "hp": {"unit": "number", "base_value": 112, "add_weight": 1, "upgrade_weight": 1},
+        "hp_pct": {"unit": "percentage", "base_value": 3, "add_weight": 1, "upgrade_weight": 1},
+        "pen": {"unit": "number", "base_value": 9, "add_weight": 1, "upgrade_weight": 1}
+      },
+      "main_stats": {
+        "1": {
+          "hp": {"unit": "number", "values": [550, 660, 770, 880, 990, 1100, 1210, 1320, 1430, 1540, 1650, 1760, 1870, 1980, 2090, 2200]}
+        },
+        "2": {
+          "atk": {"unit": "number", "values": [79, 94.8, 110.6, 126.4, 142.2, 158, 173.8, 189.6, 205.4, 221.2, 237, 252.8, 268.6, 284.4, 300.2, 316]}
+        },
+        "3": {
+          "def": {"unit": "number", "values": [46, 55.2, 64.4, 73.6, 82.8, 92, 101.2, 110.4, 119.6, 128.8, 138, 147.2, 156.4, 165.6, 174.8, 184]}
+        },
+        "4": {
+          "anomaly_proficiency": {"unit": "number", "values": [23, 27.6, 32.2, 36.8, 41.4, 46, 50.6, 55.2, 59.8, 64.4, 69, 73.6, 78.2, 82.8, 87.4, 92]},
+          "atk_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "crit_dmg": {"unit": "percentage", "values": [12, 14.4, 16.8, 19.2, 21.6, 24, 26.4, 28.8, 31.2, 33.6, 36, 38.4, 40.8, 43.2, 45.6, 48]},
+          "crit_rate": {"unit": "percentage", "values": [6, 7.2, 8.4, 9.6, 10.8, 12, 13.2, 14.4, 15.6, 16.8, 18, 19.2, 20.4, 21.6, 22.8, 24]},
+          "def_pct": {"unit": "percentage", "values": [12, 14.4, 16.8, 19.2, 21.6, 24, 26.4, 28.8, 31.2, 33.6, 36, 38.4, 40.8, 43.2, 45.6, 48]},
+          "hp_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]}
+        },
+        "5": {
+          "atk_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "def_pct": {"unit": "percentage", "values": [12, 14.4, 16.8, 19.2, 21.6, 24, 26.4, 28.8, 31.2, 33.6, 36, 38.4, 40.8, 43.2, 45.6, 48]},
+          "electric_dmg": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "ether_dmg": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "fire_dmg": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "hp_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "ice_dmg": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "pen_ratio": {"unit": "percentage", "values": [6, 7.2, 8.4, 9.6, 10.8, 12, 13.2, 14.4, 15.6, 16.8, 18, 19.2, 20.4, 21.6, 22.8, 24]},
+          "physical_dmg": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]}
+        },
+        "6": {
+          "anomaly_mastery": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "atk_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "def_pct": {"unit": "percentage", "values": [12, 14.4, 16.8, 19.2, 21.6, 24, 26.4, 28.8, 31.2, 33.6, 36, 38.4, 40.8, 43.2, 45.6, 48]},
+          "energy_regen": {"unit": "percentage", "values": [15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60]},
+          "hp_pct": {"unit": "percentage", "values": [7.5, 9, 10.5, 12, 13.5, 15, 16.5, 18, 19.5, 21, 22.5, 24, 25.5, 27, 28.5, 30]},
+          "impact": {"unit": "percentage", "values": [4.5, 5.4, 6.3, 7.2, 8.1, 9, 9.9, 10.8, 11.7, 12.6, 13.5, 14.4, 15.3, 16.2, 17.1, 18]}
+        }
+      }
+    }
+  }
+}

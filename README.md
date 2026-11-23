@@ -29,6 +29,7 @@ The Meta can make new and casual players feel 'left out' because they don't have
     2. W-Engines with base attack, skill descriptions, and any recorded sub-stat.
     3. Drive Discs and their sets, including 2-piece and 4-piece bonuses.
     4. Bangboos and their skills, with the same stat progression API.
+3. Stateless Drive Disc upgrades, exact model forecasts, and weighted comparisons.
 
 # REST API Documentation
 
@@ -38,8 +39,9 @@ The Meta can make new and casual players feel 'left out' because they don't have
 - [Bangboos](#bangboos-api) — `/bangboos`
 - [W-Engines](#w-engines-api) — `/wengines`
 - [Disc Drives](#disc-drives-api) — `/discdrives` and `/discdrivesets`
+- [Drive Disc Simulation](#drive-disc-simulation-api) — `/v1/disc-rules`, `/v1/disc-sessions`, and `/v1/disc-comparisons`
 
-All endpoints are read-only (`GET`). [Run the API locally](#how-to-use) at `http://localhost:8081` to try the examples.
+Catalog and progression endpoints are read-only (`GET`). Simulation `POST`s do not modify the catalog or save sessions. [Run the API locally](#how-to-use) at `http://localhost:8081` to try the examples.
 
 | Request | `Accept` header | Response |
 | --- | --- | --- |
@@ -305,6 +307,12 @@ Use these values for disc `type` filters. The same codes appear as W-Engine `sub
 | Damage bonus | `ICE_DMG`, `FIRE_DMG`, `ELECTRIC_DMG`, `ETHER_DMG`, `PHYSICAL_DMG` |
 
 [Back to index](#rest-api-documentation)
+
+## Drive Disc Simulation API
+
+Import a Drive Disc, simulate or record upgrades, forecast roll outcomes, and
+compare discs using stat weights. See the [Drive Disc Simulation API guide](DISC_SIMULATION_API.md)
+for endpoints, worked examples, and limits.
 
 # How to Use
 
